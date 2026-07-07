@@ -1,0 +1,78 @@
+erDiagram
+    USER {
+        bigint id PK
+        varchar email UK
+        varchar username UK
+        varchar password_hash
+        varchar profile_photo_url
+        timestamp created_at
+    }
+
+    TRIP {
+        bigint id PK
+        bigint user_id FK
+        varchar title
+        text description
+        date start_date
+        date end_date
+        varchar cover_photo_url
+        varchar status "PLANNED | ONGOING | COMPLETED"
+        timestamp created_at
+    }
+
+    DESTINATION {
+        bigint id PK
+        bigint trip_id FK
+        varchar name
+        varchar country
+        varchar state_province
+        varchar city
+        decimal latitude
+        decimal longitude
+        varchar type "CITY | COUNTRY | NATIONAL_PARK | LANDMARK | BEACH | MOUNTAIN"
+        date arrival_date
+        date departure_date
+        text notes
+        int rating
+        timestamp created_at
+    }
+
+    MEMORY {
+        bigint id PK
+        bigint trip_id FK
+        bigint destination_id FK "nullable"
+        varchar title
+        text journal_entry
+        date memory_date
+        timestamp created_at
+    }
+
+    PHOTO {
+        bigint id PK
+        bigint memory_id FK "nullable"
+        bigint trip_id FK
+        varchar cloudinary_url
+        varchar cloudinary_public_id
+        varchar caption
+        timestamp taken_at
+        timestamp created_at
+    }
+
+    BUCKET_LIST_ITEM {
+        bigint id PK
+        bigint user_id FK
+        varchar destination_name
+        varchar country
+        text notes
+        boolean is_completed
+        timestamp completed_at
+        timestamp created_at
+    }
+
+    USER ||--o{ TRIP : "owns"
+    USER ||--o{ BUCKET_LIST_ITEM : "has"
+    TRIP ||--o{ DESTINATION : "contains"
+    TRIP ||--o{ MEMORY : "contains"
+    TRIP ||--o{ PHOTO : "has"
+    DESTINATION ||--o{ MEMORY : "attached to"
+    MEMORY ||--o{ PHOTO : "has"
