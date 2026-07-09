@@ -5,6 +5,7 @@ import { LoginForm } from '@/features/auth/components/LoginForm'
 import { RegisterForm } from '@/features/auth/components/RegisterForm'
 import { Dashboard } from '@/pages/Dashboard'
 import { MapPage } from '@/pages/MapPage'
+import { TripDetail } from '@/pages/TripDetail'
 
 export default function App() {
   return (
@@ -18,10 +19,9 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/map" element={<MapPage />} />
-          {/* Additional pages to be built */}
-          <Route path="/trips/:id" element={<div className="p-4 text-gray-500">Trip detail — coming next</div>} />
-          <Route path="/memories" element={<div className="p-4 text-gray-500">Memories — coming next</div>} />
-          <Route path="/bucket-list" element={<div className="p-4 text-gray-500">Bucket list — coming next</div>} />
+          <Route path="/trips/:id" element={<TripDetail />} />
+          <Route path="/memories" element={<div className="p-4 text-gray-500">Memories — coming soon</div>} />
+          <Route path="/bucket-list" element={<div className="p-4 text-gray-500">Bucket list — coming soon</div>} />
         </Route>
       </Route>
 
