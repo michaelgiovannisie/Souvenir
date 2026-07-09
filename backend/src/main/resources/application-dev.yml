@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/souvenir_dev
+    username: ${DB_USERNAME:souvenir}
+    password: ${DB_PASSWORD:souvenir}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    com.souvenir: DEBUG
+    org.springframework.security: DEBUG
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-key-change-in-production-must-be-at-least-256-bits}
+    access-token-expiration: 900000       # 15 minutes
+    refresh-token-expiration: 604800000   # 7 days
+
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME:your-cloud-name}
+    api-key: ${CLOUDINARY_API_KEY:your-api-key}
+    api-secret: ${CLOUDINARY_API_SECRET:your-api-secret}
+
+  cors:
+    allowed-origins:
+      - http://localhost:5173

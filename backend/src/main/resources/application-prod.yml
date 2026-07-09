@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    com.souvenir: INFO
+    org.springframework.security: WARN
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-token-expiration: 900000       # 15 minutes
+    refresh-token-expiration: 604800000   # 7 days
+
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+
+  cors:
+    allowed-origins:
+      - ${FRONTEND_URL}
