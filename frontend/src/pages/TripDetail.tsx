@@ -7,6 +7,7 @@ import { useTrip } from '@/features/trips/hooks/useTrips'
 import { useTripPhotos } from '@/features/photos/hooks/usePhotos'
 import { PhotoUploader } from '@/features/photos/components/PhotoUploader'
 import { PhotoGallery } from '@/features/photos/components/PhotoGallery'
+import { DestinationsTab } from '@/features/destinations/components/DestinationsTab'
 
 type Tab = 'photos' | 'destinations' | 'memories'
 
@@ -198,10 +199,7 @@ export function TripDetail() {
       )}
 
       {activeTab === 'destinations' && (
-        <div className="text-center py-20 text-gray-400">
-          <div className="text-5xl mb-3">📍</div>
-          <p className="text-sm font-medium text-gray-500">Destinations — coming soon</p>
-        </div>
+        <DestinationsTab tripId={id!} />
       )}
 
       {activeTab === 'memories' && (
