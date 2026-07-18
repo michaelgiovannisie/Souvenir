@@ -27,6 +27,14 @@ public class MemoryService {
     private final DestinationRepository destinationRepository;
 
     @Transactional(readOnly = true)
+    public List<MemoryResponse> getAllMemories(String email) {
+        return memoryRepository.findAllByUserEmail(email)
+                .stream()
+                .map(MemoryResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public List<MemoryResponse> getTripMemories(UUID tripId, String email) {
         Trip trip = getActiveTrip(tripId);
         assertOwnership(trip, email);

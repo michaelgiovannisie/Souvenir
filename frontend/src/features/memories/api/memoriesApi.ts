@@ -3,6 +3,7 @@ import { api } from '@/lib/axios'
 export interface Memory {
   id: string
   tripId: string
+  tripTitle: string
   destinationId: string | null
   destinationName: string | null
   destinationCountry: string | null
@@ -22,6 +23,11 @@ export interface MemoryRequest {
 }
 
 export const memoriesApi = {
+  getAll: async (): Promise<Memory[]> => {
+    const { data } = await api.get('/memories')
+    return data.data
+  },
+
   getByTrip: async (tripId: string): Promise<Memory[]> => {
     const { data } = await api.get(`/trips/${tripId}/memories`)
     return data.data

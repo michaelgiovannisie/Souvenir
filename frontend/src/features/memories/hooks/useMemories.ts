@@ -4,7 +4,15 @@ import { tripKeys } from '@/features/trips/hooks/useTrips'
 
 export const memoryKeys = {
   all: ['memories'] as const,
+  global: () => [...memoryKeys.all, 'global'] as const,
   byTrip: (tripId: string) => [...memoryKeys.all, 'trip', tripId] as const,
+}
+
+export function useAllMemories() {
+  return useQuery({
+    queryKey: memoryKeys.global(),
+    queryFn: () => memoriesApi.getAll(),
+  })
 }
 
 export function useTripMemories(tripId: string) {

@@ -27,6 +27,16 @@ public class MemoryController {
 
     private final MemoryService memoryService;
 
+    @GetMapping("/memories")
+    @Operation(summary = "Get all memories across all trips for the current user")
+    public ResponseEntity<ApiResponse<List<MemoryResponse>>> getAllMemories(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                memoryService.getAllMemories(userDetails.getUsername())
+        ));
+    }
+
     @GetMapping("/trips/{tripId}/memories")
     @Operation(summary = "Get all memories for a trip, ordered by date descending")
     public ResponseEntity<ApiResponse<List<MemoryResponse>>> getTripMemories(

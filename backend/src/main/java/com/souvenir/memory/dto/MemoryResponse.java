@@ -13,6 +13,7 @@ import java.util.UUID;
 public class MemoryResponse {
     private final UUID id;
     private final UUID tripId;
+    private final String tripTitle;
     private final UUID destinationId;
     private final String destinationName;
     private final String destinationCountry;
@@ -27,6 +28,7 @@ public class MemoryResponse {
         return MemoryResponse.builder()
                 .id(memory.getId())
                 .tripId(memory.getTrip().getId())
+                .tripTitle(memory.getTrip().getTitle())
                 .destinationId(memory.getDestination() != null ? memory.getDestination().getId() : null)
                 .destinationName(memory.getDestination() != null ? memory.getDestination().getName() : null)
                 .destinationCountry(memory.getDestination() != null ? memory.getDestination().getCountry() : null)

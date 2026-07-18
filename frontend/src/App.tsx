@@ -8,6 +8,7 @@ import { MapPage } from '@/pages/MapPage'
 import { TripDetail } from '@/pages/TripDetail'
 import { StatsDashboard } from '@/pages/StatsDashboard'
 import { BucketListPage } from '@/pages/BucketListPage'
+import { MemoriesPage } from '@/pages/MemoriesPage'
 
 export default function App() {
   return (
@@ -22,7 +23,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/trips/:id" element={<TripDetail />} />
-          <Route path="/memories" element={<div className="p-4 text-gray-500">Memories — coming soon</div>} />
+          <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/bucket-list" element={<BucketListPage />} />
           <Route path="/stats" element={<StatsDashboard />} />
         </Route>
