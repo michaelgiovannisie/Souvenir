@@ -61,6 +61,8 @@ public class MemoryService {
                 .title(request.getTitle())
                 .journalEntry(request.getJournalEntry())
                 .memoryDate(request.getMemoryDate())
+                .mood(request.getMood())
+                .tags(request.getTags() != null ? new java.util.LinkedHashSet<>(request.getTags()) : new java.util.LinkedHashSet<>())
                 .build();
 
         return MemoryResponse.from(memoryRepository.save(memory));
@@ -81,6 +83,9 @@ public class MemoryService {
         memory.setJournalEntry(request.getJournalEntry());
         memory.setMemoryDate(request.getMemoryDate());
         memory.setDestination(destination);
+        memory.setMood(request.getMood());
+        memory.getTags().clear();
+        if (request.getTags() != null) memory.getTags().addAll(request.getTags());
 
         return MemoryResponse.from(memoryRepository.save(memory));
     }

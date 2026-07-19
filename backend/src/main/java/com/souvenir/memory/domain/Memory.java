@@ -9,7 +9,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "memories")
@@ -36,6 +38,18 @@ public class Memory extends BaseEntity {
 
     @Column(name = "memory_date")
     private LocalDate memoryDate;
+
+    @Column(name = "mood", length = 30)
+    private String mood;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "memory_tags",
+            joinColumns = @JoinColumn(name = "memory_id")
+    )
+    @Column(name = "tag", length = 50)
+    @Builder.Default
+    private Set<String> tags = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "memory", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

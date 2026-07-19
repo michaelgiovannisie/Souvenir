@@ -6,6 +6,8 @@ import lombok.Getter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -20,6 +22,8 @@ public class MemoryResponse {
     private final String title;
     private final String journalEntry;
     private final LocalDate memoryDate;
+    private final String mood;
+    private final List<String> tags;
     private final int photoCount;
     private final Instant createdAt;
     private final Instant updatedAt;
@@ -35,6 +39,8 @@ public class MemoryResponse {
                 .title(memory.getTitle())
                 .journalEntry(memory.getJournalEntry())
                 .memoryDate(memory.getMemoryDate())
+                .mood(memory.getMood())
+                .tags(memory.getTags() != null ? new ArrayList<>(memory.getTags()) : new ArrayList<>())
                 .photoCount(memory.getPhotos() != null
                         ? (int) memory.getPhotos().stream().filter(p -> p.getDeletedAt() == null).count()
                         : 0)

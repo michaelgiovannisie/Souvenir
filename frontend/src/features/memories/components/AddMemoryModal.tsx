@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState, KeyboardEvent } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { X, BookOpen } from 'lucide-react'
-import { memorySchema, MemoryFormValues } from '../schemas/memorySchema'
-import { Memory } from '../api/memoriesApi'
+import { X, BookOpen, Tag, Plus } from 'lucide-react'
+import { clsx } from 'clsx'
+import { memorySchema, MemoryFormValues, MOODS } from '../schemas/memorySchema'
+import { Memory, MemoryMood } from '../api/memoriesApi'
 import { useCreateMemory, useUpdateMemory } from '../hooks/useMemories'
 import { useTripDestinations } from '@/features/destinations/hooks/useDestinations'
 import { Input } from '@/components/ui/Input'
@@ -22,10 +23,15 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
   const { data: destinations = [] } = useTripDestinations(tripId)
   const isPending = isCreating || isUpdating
 
+  // Tag chip state (local — synced into form via setValue)
+  const [tagInput, setTagInput] = useState('')
+
   const {
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<MemoryFormValues>({
     resolver: zodResolver(memorySchema),
@@ -34,21 +40,51 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
       journalEntry: editTarget?.journalEntry ?? '',
       memoryDate: editTarget?.memoryDate ?? '',
       destinationId: editTarget?.destinationId ?? null,
+      mood: editTarget?.mood ?? null,
+      tags: editTarget?.tags ?? [],
     },
   })
 
+  const currentMood = watch('mood')
+  const currentTags = watch('tags') ?? []
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
+    window.addEventListener('keydown', handler as any)
+    return () => window.removeEventListener('keydown', handler as any)
   }, [onClose])
 
+  // ── Tag helpers ──────────────────────────────────────────────────────────────
+  function commitTag() {
+    const raw = tagInput.trim().toLowerCase().replace(/\s+/g, '-')
+    if (!raw || currentTags.includes(raw) || currentTags.length >= 10) return
+    setValue('tags', [...currentTags, raw])
+    setTagInput('')
+  }
+
+  function handleTagKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault()
+      commitTag()
+    }
+    if (e.key === 'Backspace' && tagInput === '' && currentTags.length > 0) {
+      setValue('tags', currentTags.slice(0, -1))
+    }
+  }
+
+  function removeTag(tag: string) {
+    setValue('tags', currentTags.filter((t) => t !== tag))
+  }
+
+  // ── Submit ───────────────────────────────────────────────────────────────────
   const onSubmit = (values: MemoryFormValues) => {
     const payload = {
       ...values,
       memoryDate: values.memoryDate || null,
       destinationId: values.destinationId || null,
       journalEntry: values.journalEntry || undefined,
+      mood: (values.mood as MemoryMood) || null,
+      tags: values.tags ?? [],
     }
 
     if (isEditing) {
@@ -128,6 +164,89 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
               </div>
             </div>
 
+            {/* Mood picker */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                How did you feel?
+                <span className="ml-1 text-xs text-gray-400 font-normal">optional</span>
+              </label>
+              <Controller
+                name="mood"
+                control={control}
+                render={({ field }) => (
+                  <div className="flex flex-wrap gap-2">
+                    {MOODS.map(({ value, emoji, label }) => {
+                      const isSelected = field.value === value
+                      return (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => field.onChange(isSelected ? null : value)}
+                          className={clsx(
+                            'flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-medium transition-all',
+                            isSelected
+                              ? 'bg-brand-50 border-brand-300 text-brand-700 shadow-sm'
+                              : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                          )}
+                        >
+                          <span>{emoji}</span>
+                          <span>{label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+              />
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tags
+                <span className="ml-1 text-xs text-gray-400 font-normal">optional · press Enter or comma to add</span>
+              </label>
+              <div
+                className={clsx(
+                  'flex flex-wrap gap-2 min-h-[42px] px-3 py-2 border rounded-xl transition-shadow',
+                  'focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-transparent border-gray-300'
+                )}
+              >
+                {/* Existing chips */}
+                {currentTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-brand-50 border border-brand-200 text-xs font-medium text-brand-700"
+                  >
+                    <Tag className="w-3 h-3" />
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(tag)}
+                      className="ml-0.5 text-brand-400 hover:text-brand-700 transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+
+                {/* Input */}
+                {currentTags.length < 10 && (
+                  <input
+                    type="text"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagKeyDown}
+                    onBlur={commitTag}
+                    placeholder={currentTags.length === 0 ? 'food, hiking, culture…' : ''}
+                    className="flex-1 min-w-[120px] text-sm outline-none bg-transparent text-gray-700 placeholder-gray-400"
+                  />
+                )}
+              </div>
+              {currentTags.length >= 10 && (
+                <p className="text-xs text-amber-500 mt-1">Maximum 10 tags reached</p>
+              )}
+            </div>
+
             {/* Journal entry */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -135,11 +254,10 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
               </label>
               <textarea
                 {...register('journalEntry')}
-                rows={12}
+                rows={10}
                 placeholder="Write about what happened, how you felt, what you saw…"
                 className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none leading-relaxed"
               />
-              <p className="text-xs text-gray-400 mt-1">No limit — write as much as you want.</p>
             </div>
           </div>
 

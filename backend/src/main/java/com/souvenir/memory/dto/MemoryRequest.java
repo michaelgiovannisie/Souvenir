@@ -1,10 +1,13 @@
 package com.souvenir.memory.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -20,4 +23,13 @@ public class MemoryRequest {
     private LocalDate memoryDate;
 
     private UUID destinationId;
+
+    @Pattern(
+        regexp = "HAPPY|EXCITED|PEACEFUL|EMOTIONAL|TIRED|ADVENTUROUS|FUNNY|ROMANTIC|GRATEFUL|NOSTALGIC",
+        message = "Invalid mood value"
+    )
+    private String mood;
+
+    @Size(max = 10, message = "Maximum 10 tags allowed")
+    private Set<String> tags = new LinkedHashSet<>();
 }

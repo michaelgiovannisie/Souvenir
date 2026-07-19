@@ -1,8 +1,11 @@
 import { useState } from 'react'
-import { Pencil, Trash2, ChevronDown, ChevronUp, MapPin, Camera } from 'lucide-react'
+import { Pencil, Trash2, ChevronDown, ChevronUp, MapPin, Camera, Tag } from 'lucide-react'
 import dayjs from 'dayjs'
 import { clsx } from 'clsx'
 import { Memory } from '../api/memoriesApi'
+import { MOODS } from '../schemas/memorySchema'
+
+const MOOD_MAP = Object.fromEntries(MOODS.map((m) => [m.value, m]))
 
 const PREVIEW_LENGTH = 220
 
@@ -44,8 +47,13 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
                   {dayjs(m.memoryDate).format('dddd, MMMM D, YYYY')}
                 </p>
               )}
-              {/* Title */}
-              <h3 className="font-semibold text-gray-900 leading-snug">{m.title}</h3>
+              {/* Title + mood emoji */}
+              <h3 className="font-semibold text-gray-900 leading-snug flex items-center gap-1.5">
+                {m.mood && MOOD_MAP[m.mood] && (
+                  <span title={MOOD_MAP[m.mood].label}>{MOOD_MAP[m.mood].emoji}</span>
+                )}
+                {m.title}
+              </h3>
             </div>
 
             {/* Actions */}
@@ -102,6 +110,21 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
             </div>
           ) : (
             <p className="text-sm text-gray-400 italic">No journal entry written yet.</p>
+          )}
+
+          {/* Tags */}
+          {m.tags && m.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {m.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-xs text-gray-500 font-medium"
+                >
+                  <Tag className="w-2.5 h-2.5" />
+                  {tag}
+                </span>
+              ))}
+            </div>
           )}
 
           {/* Photo count */}

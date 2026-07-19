@@ -1,10 +1,13 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { BookHeart, Search, ExternalLink, MapPin, Camera, ChevronDown, ChevronUp } from 'lucide-react'
+import { BookHeart, Search, ExternalLink, MapPin, Camera, ChevronDown, ChevronUp, Tag, X } from 'lucide-react'
 import dayjs from 'dayjs'
 import { clsx } from 'clsx'
 import { useAllMemories } from '@/features/memories/hooks/useMemories'
 import { Memory } from '@/features/memories/api/memoriesApi'
+import { MOODS } from '@/features/memories/schemas/memorySchema'
+
+const MOOD_MAP = Object.fromEntries(MOODS.map((m) => [m.value, m]))
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PREVIEW_LENGTH = 240
@@ -47,7 +50,12 @@ function GlobalMemoryCard({ memory: m, isLast }: { memory: Memory; isLast: boole
                   {dayjs(m.memoryDate).format('dddd, MMMM D, YYYY')}
                 </p>
               )}
-              <h3 className="font-semibold text-gray-900 leading-snug">{m.title}</h3>
+              <h3 className="font-semibold text-gray-900 leading-snug flex items-center gap-1.5">
+                {m.mood && MOOD_MAP[m.mood] && (
+                  <span title={MOOD_MAP[m.mood].label}>{MOOD_MAP[m.mood].emoji}</span>
+                )}
+                {m.title}
+              </h3>
             </div>
 
             {/* Trip link */}
@@ -95,6 +103,21 @@ function GlobalMemoryCard({ memory: m, isLast }: { memory: Memory; isLast: boole
             </div>
           ) : (
             <p className="text-sm text-gray-400 italic">No journal entry written yet.</p>
+          )}
+
+          {/* Tags */}
+          {m.tags && m.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {m.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-xs text-gray-500 font-medium"
+                >
+                  <Tag className="w-2.5 h-2.5" />
+                  {tag}
+                </span>
+              ))}
+            </div>
           )}
 
           {/* Photo count */}
@@ -153,8 +176,10 @@ function EmptyState({ hasSearch }: { hasSearch: boolean }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export function MemoriesPage() {
-  const [search, setSearch] = useState('')
+  const [search, setSearch]         = useState('')
   const [tripFilter, setTripFilter] = useState<string>('all')
+  const [moodFilter, setMoodFilter] = useState<string>('all')
+  const [tagFilter, setTagFilter]   = useState<string>('')
 
   const { data: memories = [], isLoading, isError } = useAllMemories()
 
@@ -167,10 +192,19 @@ export function MemoriesPage() {
     return Array.from(seen.entries()).map(([id, title]) => ({ id, title }))
   }, [memories])
 
+  // All unique tags across memories
+  const allTags = useMemo(() => {
+    const set = new Set<string>()
+    memories.forEach((m) => m.tags?.forEach((t) => set.add(t)))
+    return Array.from(set).sort()
+  }, [memories])
+
   // Filtered + searched memories
   const filtered = useMemo(() => {
     let base = memories
     if (tripFilter !== 'all') base = base.filter((m) => m.tripId === tripFilter)
+    if (moodFilter !== 'all') base = base.filter((m) => m.mood === moodFilter)
+    if (tagFilter)            base = base.filter((m) => m.tags?.includes(tagFilter))
     if (search.trim()) {
       const q = search.toLowerCase()
       base = base.filter(
@@ -182,7 +216,9 @@ export function MemoriesPage() {
       )
     }
     return base
-  }, [memories, tripFilter, search])
+  }, [memories, tripFilter, moodFilter, tagFilter, search])
+
+  const hasActiveFilter = tripFilter !== 'all' || moodFilter !== 'all' || tagFilter || search
 
   // Group by year for timeline dividers
   const grouped = useMemo(() => {
@@ -221,38 +257,77 @@ export function MemoriesPage() {
 
       {/* Filters */}
       {memories.length > 0 && (
-        <div className="flex flex-col sm:flex-row gap-3">
-          {/* Trip filter */}
-          {trips.length > 1 && (
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            {/* Trip filter */}
+            {trips.length > 1 && (
+              <select
+                value={tripFilter}
+                onChange={(e) => setTripFilter(e.target.value)}
+                className="px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow"
+              >
+                <option value="all">All trips</option>
+                {trips.map(({ id, title }) => (
+                  <option key={id} value={id}>{title}</option>
+                ))}
+              </select>
+            )}
+
+            {/* Mood filter */}
             <select
-              value={tripFilter}
-              onChange={(e) => setTripFilter(e.target.value)}
-              className="px-3.5 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow"
+              value={moodFilter}
+              onChange={(e) => setMoodFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow"
             >
-              <option value="all">All trips</option>
-              {trips.map(({ id, title }) => (
-                <option key={id} value={id}>{title}</option>
+              <option value="all">All moods</option>
+              {MOODS.map(({ value, emoji, label }) => (
+                <option key={value} value={value}>{emoji} {label}</option>
               ))}
             </select>
-          )}
 
-          {/* Search */}
-          <div className="relative flex-1 sm:max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search memories..."
-              className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow"
-            />
+            {/* Tag filter */}
+            {allTags.length > 0 && (
+              <select
+                value={tagFilter}
+                onChange={(e) => setTagFilter(e.target.value)}
+                className="px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow"
+              >
+                <option value="">All tags</option>
+                {allTags.map((tag) => (
+                  <option key={tag} value={tag}>#{tag}</option>
+                ))}
+              </select>
+            )}
+
+            {/* Search */}
+            <div className="relative flex-1 min-w-[180px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search memories..."
+                className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow"
+              />
+            </div>
+
+            {/* Clear filters */}
+            {hasActiveFilter && (
+              <button
+                onClick={() => { setSearch(''); setTripFilter('all'); setMoodFilter('all'); setTagFilter('') }}
+                className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+                Clear
+              </button>
+            )}
           </div>
 
-          {/* Result count when filtering */}
-          {(search || tripFilter !== 'all') && (
-            <div className="flex items-center text-sm text-gray-400 self-center">
+          {/* Active filter chips */}
+          {hasActiveFilter && (
+            <p className="text-sm text-gray-400">
               {filtered.length} result{filtered.length !== 1 ? 's' : ''}
-            </div>
+            </p>
           )}
         </div>
       )}
@@ -265,7 +340,7 @@ export function MemoriesPage() {
           <p>Failed to load memories. Please try again.</p>
         </div>
       ) : filtered.length === 0 ? (
-        <EmptyState hasSearch={!!(search || tripFilter !== 'all')} />
+        <EmptyState hasSearch={!!hasActiveFilter} />
       ) : (
         <div>
           {grouped.map((item, i) => {

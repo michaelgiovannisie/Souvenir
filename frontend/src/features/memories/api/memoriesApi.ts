@@ -1,5 +1,10 @@
 import { api } from '@/lib/axios'
 
+export type MemoryMood =
+  | 'HAPPY' | 'EXCITED' | 'PEACEFUL' | 'EMOTIONAL'
+  | 'TIRED' | 'ADVENTUROUS' | 'FUNNY' | 'ROMANTIC'
+  | 'GRATEFUL' | 'NOSTALGIC'
+
 export interface Memory {
   id: string
   tripId: string
@@ -10,6 +15,8 @@ export interface Memory {
   title: string
   journalEntry: string | null
   memoryDate: string | null
+  mood: MemoryMood | null
+  tags: string[]
   photoCount: number
   createdAt: string
   updatedAt: string
@@ -20,6 +27,8 @@ export interface MemoryRequest {
   journalEntry?: string
   memoryDate?: string | null
   destinationId?: string | null
+  mood?: MemoryMood | null
+  tags?: string[]
 }
 
 export const memoriesApi = {
