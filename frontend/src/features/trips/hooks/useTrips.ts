@@ -49,3 +49,25 @@ export function useDeleteTrip() {
     onSuccess: () => qc.invalidateQueries({ queryKey: tripKeys.lists() }),
   })
 }
+
+export function useSetCoverPhoto(tripId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (photoId: string) => tripsApi.setCoverPhoto(tripId, photoId),
+    onSuccess: (updated) => {
+      qc.setQueryData(tripKeys.detail(tripId), updated)
+      qc.invalidateQueries({ queryKey: tripKeys.lists() })
+    },
+  })
+}
+
+export function useRemoveCoverPhoto(tripId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: () => tripsApi.removeCoverPhoto(tripId),
+    onSuccess: (updated) => {
+      qc.setQueryData(tripKeys.detail(tripId), updated)
+      qc.invalidateQueries({ queryKey: tripKeys.lists() })
+    },
+  })
+}

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
-import { useTrip } from '@/features/trips/hooks/useTrips'
+import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto } from '@/features/trips/hooks/useTrips'
 import { useTripPhotos } from '@/features/photos/hooks/usePhotos'
 import { PhotoUploader } from '@/features/photos/components/PhotoUploader'
 import { PhotoGallery } from '@/features/photos/components/PhotoGallery'
@@ -31,6 +31,8 @@ export function TripDetail() {
 
   const { data: trip, isLoading: tripLoading } = useTrip(id!)
   const { data: photos = [], isLoading: photosLoading } = useTripPhotos(id!)
+  const { mutate: setCover, isPending: isSettingCover } = useSetCoverPhoto(id!)
+  const { mutate: removeCover, isPending: isRemovingCover } = useRemoveCoverPhoto(id!)
 
   if (tripLoading) {
     return (
@@ -113,6 +115,19 @@ export function TripDetail() {
                 )}
               </div>
             </div>
+
+            {/* Remove cover button — only visible when a cover is set */}
+            {trip.coverPhotoUrl && (
+              <button
+                onClick={() => removeCover()}
+                disabled={isRemovingCover}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/40 hover:bg-black/60 text-white/80 hover:text-white text-xs font-medium transition-colors disabled:opacity-50 flex-shrink-0"
+                title="Remove cover photo"
+              >
+                <ImageOff className="w-3.5 h-3.5" />
+                {isRemovingCover ? 'Removing…' : 'Remove cover'}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -194,7 +209,13 @@ export function TripDetail() {
               ))}
             </div>
           ) : (
-            <PhotoGallery tripId={id!} photos={photos} />
+            <PhotoGallery
+            tripId={id!}
+            photos={photos}
+            currentCoverUrl={trip.coverPhotoUrl}
+            onSetCover={(photoId) => setCover(photoId)}
+            isSettingCover={isSettingCover}
+          />
           )}
         </div>
       )}

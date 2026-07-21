@@ -58,4 +58,14 @@ export const tripsApi = {
   deleteTrip: async (id: string): Promise<void> => {
     await api.delete(`/trips/${id}`)
   },
+
+  setCoverPhoto: async (tripId: string, photoId: string): Promise<Trip> => {
+    const { data } = await api.patch(`/trips/${tripId}/cover-photo`, { photoId })
+    return data.data
+  },
+
+  removeCoverPhoto: async (tripId: string): Promise<Trip> => {
+    const { data } = await api.delete(`/trips/${tripId}/cover-photo`)
+    return data.data
+  },
 }

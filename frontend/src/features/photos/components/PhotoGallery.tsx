@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Trash2, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { Trash2, X, ChevronLeft, ChevronRight, ZoomIn, ImagePlus, Crown } from 'lucide-react'
 import { clsx } from 'clsx'
 import { Photo } from '../api/photosApi'
 import { useDeletePhoto } from '../hooks/usePhotos'
@@ -7,9 +7,12 @@ import { useDeletePhoto } from '../hooks/usePhotos'
 interface PhotoGalleryProps {
   tripId: string
   photos: Photo[]
+  currentCoverUrl?: string | null
+  onSetCover?: (photoId: string) => void
+  isSettingCover?: boolean
 }
 
-export function PhotoGallery({ tripId, photos }: PhotoGalleryProps) {
+export function PhotoGallery({ tripId, photos, currentCoverUrl, onSetCover, isSettingCover }: PhotoGalleryProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const { mutate: deletePhoto, isPending: isDeleting } = useDeletePhoto(tripId)
@@ -53,43 +56,66 @@ export function PhotoGallery({ tripId, photos }: PhotoGalleryProps) {
     <>
       {/* Masonry grid */}
       <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
-        {photos.map((photo, index) => (
-          <div key={photo.id} className="break-inside-avoid group relative rounded-xl overflow-hidden bg-gray-100">
-            <img
-              src={photo.cloudinaryUrl}
-              alt={photo.caption ?? ''}
-              className="w-full object-cover cursor-pointer transition-transform duration-200 group-hover:scale-105"
-              onClick={() => setLightboxIndex(index)}
-              loading="lazy"
-            />
+        {photos.map((photo, index) => {
+          const isCover = !!currentCoverUrl && photo.cloudinaryUrl === currentCoverUrl
+          return (
+            <div key={photo.id} className="break-inside-avoid group relative rounded-xl overflow-hidden bg-gray-100">
+              <img
+                src={photo.cloudinaryUrl}
+                alt={photo.caption ?? ''}
+                className="w-full object-cover cursor-pointer transition-transform duration-200 group-hover:scale-105"
+                onClick={() => setLightboxIndex(index)}
+                loading="lazy"
+              />
 
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-200 pointer-events-none" />
+              {/* Cover badge */}
+              {isCover && (
+                <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 bg-amber-400/90 rounded-lg shadow-sm">
+                  <Crown className="w-3 h-3 text-white" />
+                  <span className="text-white text-xs font-semibold">Cover</span>
+                </div>
+              )}
 
-            {/* Actions on hover */}
-            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              <button
-                onClick={(e) => { e.stopPropagation(); setLightboxIndex(index) }}
-                className="p-1.5 bg-white/90 rounded-lg text-gray-700 hover:bg-white transition-colors shadow-sm"
-              >
-                <ZoomIn className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(photo.id) }}
-                className="p-1.5 bg-white/90 rounded-lg text-red-500 hover:bg-white transition-colors shadow-sm"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-200 pointer-events-none" />
 
-            {/* Caption */}
-            {photo.caption && (
-              <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <p className="text-white text-xs truncate">{photo.caption}</p>
+              {/* Actions on hover */}
+              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button
+                  onClick={(e) => { e.stopPropagation(); setLightboxIndex(index) }}
+                  className="p-1.5 bg-white/90 rounded-lg text-gray-700 hover:bg-white transition-colors shadow-sm"
+                  title="Zoom"
+                >
+                  <ZoomIn className="w-3.5 h-3.5" />
+                </button>
+                {onSetCover && !isCover && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onSetCover(photo.id) }}
+                    disabled={isSettingCover}
+                    className="p-1.5 bg-white/90 rounded-lg text-amber-500 hover:bg-white hover:text-amber-600 transition-colors shadow-sm disabled:opacity-50"
+                    title="Set as cover photo"
+                  >
+                    <ImagePlus className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <button
+                  onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(photo.id) }}
+                  className="p-1.5 bg-white/90 rounded-lg text-red-500 hover:bg-white transition-colors shadow-sm"
+                  title="Delete"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
               </div>
-            )}
-          </div>
-        ))}
+
+              {/* Caption */}
+              {photo.caption && (
+                <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="text-white text-xs truncate">{photo.caption}</p>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {/* Delete confirmation */}
@@ -137,6 +163,18 @@ export function PhotoGallery({ tripId, photos }: PhotoGalleryProps) {
           <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white/50 text-sm">
             {lightboxIndex + 1} / {photos.length}
           </div>
+
+          {/* Set as cover from lightbox */}
+          {onSetCover && photos[lightboxIndex].cloudinaryUrl !== currentCoverUrl && (
+            <button
+              className="absolute top-4 right-28 flex items-center gap-1.5 px-3 py-2 text-white/70 hover:text-amber-400 transition-colors text-sm"
+              onClick={(e) => { e.stopPropagation(); onSetCover(photos[lightboxIndex].id) }}
+              title="Set as cover photo"
+            >
+              <ImagePlus className="w-4 h-4" />
+              <span className="hidden sm:inline text-xs">Set cover</span>
+            </button>
+          )}
 
           {/* Delete from lightbox */}
           <button

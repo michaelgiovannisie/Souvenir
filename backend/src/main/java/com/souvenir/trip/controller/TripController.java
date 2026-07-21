@@ -3,6 +3,7 @@ package com.souvenir.trip.controller;
 import com.souvenir.common.response.ApiResponse;
 import com.souvenir.common.response.PageResponse;
 import com.souvenir.trip.domain.TripStatus;
+import com.souvenir.trip.dto.CoverPhotoRequest;
 import com.souvenir.trip.dto.TripRequest;
 import com.souvenir.trip.dto.TripResponse;
 import com.souvenir.trip.service.TripService;
@@ -71,6 +72,29 @@ public class TripController {
     ) {
         return ResponseEntity.ok(ApiResponse.ok(
                 tripService.updateTrip(id, request, userDetails.getUsername())
+        ));
+    }
+
+    @PatchMapping("/{id}/cover-photo")
+    @Operation(summary = "Set a photo as the trip cover")
+    public ResponseEntity<ApiResponse<TripResponse>> setCoverPhoto(
+            @PathVariable UUID id,
+            @Valid @RequestBody CoverPhotoRequest request,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                tripService.setCoverPhoto(id, request.getPhotoId(), userDetails.getUsername())
+        ));
+    }
+
+    @DeleteMapping("/{id}/cover-photo")
+    @Operation(summary = "Remove the trip cover photo")
+    public ResponseEntity<ApiResponse<TripResponse>> removeCoverPhoto(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                tripService.removeCoverPhoto(id, userDetails.getUsername())
         ));
     }
 

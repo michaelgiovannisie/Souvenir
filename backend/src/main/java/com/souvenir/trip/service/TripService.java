@@ -5,6 +5,8 @@ import com.souvenir.auth.repository.UserRepository;
 import com.souvenir.common.exception.ForbiddenException;
 import com.souvenir.common.exception.ResourceNotFoundException;
 import com.souvenir.common.response.PageResponse;
+import com.souvenir.photo.domain.Photo;
+import com.souvenir.photo.repository.PhotoRepository;
 import com.souvenir.trip.domain.Trip;
 import com.souvenir.trip.domain.TripStatus;
 import com.souvenir.trip.dto.TripRequest;
@@ -24,6 +26,7 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final PhotoRepository photoRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<TripResponse> getUserTrips(String email, TripStatus status, int page, int size) {
@@ -71,6 +74,31 @@ public class TripService {
         trip.setEndDate(request.getEndDate());
         if (request.getStatus() != null) trip.setStatus(request.getStatus());
 
+        return toResponse(tripRepository.save(trip));
+    }
+
+    @Transactional
+    public TripResponse setCoverPhoto(UUID tripId, UUID photoId, String email) {
+        Trip trip = getActiveTrip(tripId);
+        assertOwnership(trip, email);
+
+        Photo photo = photoRepository.findActiveById(photoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Photo", photoId));
+
+        // Verify the photo actually belongs to this trip
+        if (!photo.getTrip().getId().equals(tripId)) throw new ForbiddenException();
+
+        trip.setCoverPhotoUrl(photo.getCloudinaryUrl());
+        trip.setCoverPhotoPublicId(photo.getCloudinaryPublicId());
+        return toResponse(tripRepository.save(trip));
+    }
+
+    @Transactional
+    public TripResponse removeCoverPhoto(UUID tripId, String email) {
+        Trip trip = getActiveTrip(tripId);
+        assertOwnership(trip, email);
+        trip.setCoverPhotoUrl(null);
+        trip.setCoverPhotoPublicId(null);
         return toResponse(tripRepository.save(trip));
     }
 
