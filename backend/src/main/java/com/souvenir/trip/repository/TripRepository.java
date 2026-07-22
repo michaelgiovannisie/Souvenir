@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,4 +26,11 @@ public interface TripRepository extends JpaRepository<Trip, UUID> {
 
     @Query("SELECT COUNT(t) FROM Trip t WHERE t.user.id = :userId AND t.status = 'COMPLETED' AND t.deletedAt IS NULL")
     long countCompletedByUserId(UUID userId);
+
+    @Query("""
+            SELECT t FROM Trip t WHERE t.user.email = :email AND t.deletedAt IS NULL
+            AND (LOWER(t.title) LIKE :q OR LOWER(t.description) LIKE :q)
+            ORDER BY t.createdAt DESC
+            """)
+    List<Trip> search(String email, String q, Pageable pageable);
 }

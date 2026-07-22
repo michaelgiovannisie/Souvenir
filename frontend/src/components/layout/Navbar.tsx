@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { Map, Plane, BookHeart, ListChecks, BarChart2, LogOut, User } from 'lucide-react'
+import { Map, Plane, BookHeart, ListChecks, BarChart2, LogOut, User, Search } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useLogout } from '@/features/auth/hooks/useAuth'
 import { clsx } from 'clsx'
+import { SearchModal } from '@/features/search/components/SearchModal'
 
 const navItems = [
   { to: '/dashboard', label: 'Trips', icon: Plane },
@@ -15,6 +17,19 @@ const navItems = [
 export function Navbar() {
   const { user } = useAuthStore()
   const { mutate: logout } = useLogout()
+  const [searchOpen, setSearchOpen] = useState(false)
+
+  // Cmd+K / Ctrl+K global shortcut
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen((v) => !v)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-16">
@@ -45,6 +60,24 @@ export function Navbar() {
           ))}
         </div>
 
+        {/* Search trigger */}
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="hidden sm:flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-xl text-sm text-gray-400 hover:text-gray-600 hover:border-gray-300 transition-colors bg-gray-50 hover:bg-white"
+        >
+          <Search className="w-3.5 h-3.5" />
+          <span>Search…</span>
+          <kbd className="text-xs text-gray-300 bg-white border border-gray-200 rounded px-1">⌘K</kbd>
+        </button>
+
+        {/* Mobile search button */}
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="sm:hidden p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <Search className="w-4 h-4" />
+        </button>
+
         {/* User menu */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-sm text-gray-700">
@@ -66,6 +99,8 @@ export function Navbar() {
           </button>
         </div>
       </div>
+
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </nav>
   )
 }

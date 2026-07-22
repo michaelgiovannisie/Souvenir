@@ -29,4 +29,12 @@ public interface MemoryRepository extends JpaRepository<Memory, UUID> {
 
     @Query("SELECT COUNT(m) FROM Memory m WHERE m.trip.user.id = :userId AND m.deletedAt IS NULL")
     long countByUserId(UUID userId);
+
+    @Query("""
+            SELECT m FROM Memory m JOIN FETCH m.trip t WHERE t.user.email = :email
+            AND m.deletedAt IS NULL AND t.deletedAt IS NULL
+            AND (LOWER(m.title) LIKE :q OR LOWER(m.journalEntry) LIKE :q)
+            ORDER BY m.createdAt DESC
+            """)
+    List<Memory> search(String email, String q, org.springframework.data.domain.Pageable pageable);
 }

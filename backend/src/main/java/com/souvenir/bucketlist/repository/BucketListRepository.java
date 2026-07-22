@@ -18,4 +18,11 @@ public interface BucketListRepository extends JpaRepository<BucketListItem, UUID
 
     @Query("SELECT b FROM BucketListItem b WHERE b.id = :id AND b.deletedAt IS NULL")
     Optional<BucketListItem> findActiveById(UUID id);
+
+    @Query("""
+            SELECT b FROM BucketListItem b WHERE b.user.email = :email AND b.deletedAt IS NULL
+            AND (LOWER(b.destinationName) LIKE :q OR LOWER(b.country) LIKE :q OR LOWER(b.notes) LIKE :q)
+            ORDER BY b.createdAt DESC
+            """)
+    List<BucketListItem> search(String email, String q, org.springframework.data.domain.Pageable pageable);
 }
