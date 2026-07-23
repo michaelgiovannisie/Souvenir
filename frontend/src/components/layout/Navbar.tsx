@@ -80,8 +80,11 @@ export function Navbar() {
 
         {/* User menu */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-sm text-gray-700">
-            <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center">
+          <Link
+            to="/profile"
+            className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+          >
+            <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center overflow-hidden ring-2 ring-transparent hover:ring-brand-300 transition-all">
               {user?.profilePhotoUrl ? (
                 <img src={user.profilePhotoUrl} alt={user.displayName} className="w-8 h-8 rounded-full object-cover" />
               ) : (
@@ -89,7 +92,7 @@ export function Navbar() {
               )}
             </div>
             <span className="hidden sm:block font-medium">{user?.displayName}</span>
-          </div>
+          </Link>
           <button
             onClick={() => logout()}
             className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"

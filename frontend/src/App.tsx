@@ -9,6 +9,7 @@ import { TripDetail } from '@/pages/TripDetail'
 import { StatsDashboard } from '@/pages/StatsDashboard'
 import { BucketListPage } from '@/pages/BucketListPage'
 import { MemoriesPage } from '@/pages/MemoriesPage'
+import { ProfilePage } from '@/pages/ProfilePage'
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/bucket-list" element={<BucketListPage />} />
           <Route path="/stats" element={<StatsDashboard />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Route>
 
