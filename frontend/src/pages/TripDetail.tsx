@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto } from '@/features/trips/hooks/useTrips'
@@ -9,8 +9,10 @@ import { PhotoUploader } from '@/features/photos/components/PhotoUploader'
 import { PhotoGallery } from '@/features/photos/components/PhotoGallery'
 import { DestinationsTab } from '@/features/destinations/components/DestinationsTab'
 import { MemoriesTab } from '@/features/memories/components/MemoriesTab'
+import { PackingListTab } from '@/features/packing/components/PackingListTab'
+import { usePacking } from '@/features/packing/hooks/usePacking'
 
-type Tab = 'photos' | 'destinations' | 'memories'
+type Tab = 'photos' | 'destinations' | 'memories' | 'packing'
 
 const statusColors = {
   PLANNED: 'bg-yellow-100 text-yellow-700',
@@ -33,6 +35,7 @@ export function TripDetail() {
   const { data: photos = [], isLoading: photosLoading } = useTripPhotos(id!)
   const { mutate: setCover, isPending: isSettingCover } = useSetCoverPhoto(id!)
   const { mutate: removeCover, isPending: isRemovingCover } = useRemoveCoverPhoto(id!)
+  const { data: packingItems = [] } = usePacking(id!)
 
   if (tripLoading) {
     return (
@@ -61,9 +64,10 @@ export function TripDetail() {
       : null
 
   const tabs: { key: Tab; label: string; icon: typeof Camera; count?: number }[] = [
-    { key: 'photos', label: 'Photos', icon: Camera, count: trip.photoCount },
-    { key: 'destinations', label: 'Places', icon: MapPin, count: trip.destinationCount },
-    { key: 'memories', label: 'Memories', icon: BookOpen, count: trip.memoryCount },
+    { key: 'photos',       label: 'Photos',   icon: Camera,   count: trip.photoCount },
+    { key: 'destinations', label: 'Places',   icon: MapPin,   count: trip.destinationCount },
+    { key: 'memories',     label: 'Memories', icon: BookOpen, count: trip.memoryCount },
+    { key: 'packing',      label: 'Packing',  icon: Package,  count: packingItems.length || undefined },
   ]
 
   return (
@@ -226,6 +230,10 @@ export function TripDetail() {
 
       {activeTab === 'memories' && (
         <MemoriesTab tripId={id!} />
+      )}
+
+      {activeTab === 'packing' && (
+        <PackingListTab tripId={id!} />
       )}
     </div>
   )
