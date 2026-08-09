@@ -5,6 +5,7 @@ import { tripKeys } from '@/features/trips/hooks/useTrips'
 export const memoryKeys = {
   all: ['memories'] as const,
   global: () => [...memoryKeys.all, 'global'] as const,
+  onThisDay: () => [...memoryKeys.all, 'on-this-day'] as const,
   byTrip: (tripId: string) => [...memoryKeys.all, 'trip', tripId] as const,
 }
 
@@ -12,6 +13,15 @@ export function useAllMemories() {
   return useQuery({
     queryKey: memoryKeys.global(),
     queryFn: () => memoriesApi.getAll(),
+  })
+}
+
+export function useOnThisDay() {
+  return useQuery({
+    queryKey: memoryKeys.onThisDay(),
+    queryFn: () => memoriesApi.getOnThisDay(),
+    // results only change if the user adds a memory — stale after 5 min
+    staleTime: 5 * 60 * 1_000,
   })
 }
 

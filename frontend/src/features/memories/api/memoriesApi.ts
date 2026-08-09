@@ -37,6 +37,11 @@ export const memoriesApi = {
     return data.data
   },
 
+  getOnThisDay: async (): Promise<Memory[]> => {
+    const { data } = await api.get('/memories/on-this-day')
+    return data.data
+  },
+
   getByTrip: async (tripId: string): Promise<Memory[]> => {
     const { data } = await api.get(`/trips/${tripId}/memories`)
     return data.data

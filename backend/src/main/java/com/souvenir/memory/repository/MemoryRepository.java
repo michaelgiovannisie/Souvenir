@@ -37,4 +37,21 @@ public interface MemoryRepository extends JpaRepository<Memory, UUID> {
             ORDER BY m.createdAt DESC
             """)
     List<Memory> search(String email, String q, org.springframework.data.domain.Pageable pageable);
+
+    @Query("""
+            SELECT m FROM Memory m
+            LEFT JOIN FETCH m.destination
+            JOIN FETCH m.trip t
+            WHERE t.user.email = :email
+            AND m.deletedAt IS NULL AND t.deletedAt IS NULL
+            AND m.memoryDate IS NOT NULL
+            AND EXTRACT(MONTH FROM m.memoryDate) = :month
+            AND EXTRACT(DAY   FROM m.memoryDate) = :day
+            ORDER BY m.memoryDate DESC
+            """)
+    List<Memory> findOnThisDay(
+            @org.springframework.data.repository.query.Param("email") String email,
+            @org.springframework.data.repository.query.Param("month") int month,
+            @org.springframework.data.repository.query.Param("day")   int day
+    );
 }

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +30,15 @@ public class MemoryService {
     @Transactional(readOnly = true)
     public List<MemoryResponse> getAllMemories(String email) {
         return memoryRepository.findAllByUserEmail(email)
+                .stream()
+                .map(MemoryResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemoryResponse> getOnThisDay(String email) {
+        LocalDate today = LocalDate.now();
+        return memoryRepository.findOnThisDay(email, today.getMonthValue(), today.getDayOfMonth())
                 .stream()
                 .map(MemoryResponse::from)
                 .collect(Collectors.toList());

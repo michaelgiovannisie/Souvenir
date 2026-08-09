@@ -37,6 +37,16 @@ public class MemoryController {
         ));
     }
 
+    @GetMapping("/memories/on-this-day")
+    @Operation(summary = "Get memories that share today's month and day from past years")
+    public ResponseEntity<ApiResponse<List<MemoryResponse>>> getOnThisDay(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                memoryService.getOnThisDay(userDetails.getUsername())
+        ));
+    }
+
     @GetMapping("/trips/{tripId}/memories")
     @Operation(summary = "Get all memories for a trip, ordered by date descending")
     public ResponseEntity<ApiResponse<List<MemoryResponse>>> getTripMemories(

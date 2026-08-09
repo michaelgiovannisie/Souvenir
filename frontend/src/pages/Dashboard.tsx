@@ -4,6 +4,7 @@ import { Plus, Loader2, Sparkles } from 'lucide-react'
 import { useTrips } from '@/features/trips/hooks/useTrips'
 import { useGenerateSampleTrip } from '@/features/trips/hooks/useGenerateSampleTrip'
 import { TripCard } from '@/features/trips/components/TripCard'
+import { OnThisDayCard } from '@/features/memories/components/OnThisDayCard'
 import { Button } from '@/components/ui/Button'
 import { useAuthStore } from '@/store/authStore'
 import type { TripStatus } from '@/features/trips/api/tripsApi'
@@ -68,6 +69,9 @@ export function Dashboard() {
           </Button>
         </div>
       </div>
+
+      {/* On this day */}
+      <OnThisDayCard />
 
       {/* Status filter tabs */}
       <div className="flex gap-2 mb-6">
