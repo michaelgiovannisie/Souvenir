@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto } from '@/features/trips/hooks/useTrips'
@@ -72,14 +72,26 @@ export function TripDetail() {
 
   return (
     <div className="space-y-6">
-      {/* Back link */}
-      <Link
-        to="/dashboard"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        All trips
-      </Link>
+      {/* Back link + export */}
+      <div className="flex items-center justify-between">
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          All trips
+        </Link>
+        <a
+          href={`/trips/${id}/print`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+          title="Export as PDF"
+        >
+          <Download className="w-4 h-4" />
+          <span className="hidden sm:inline">Export PDF</span>
+        </a>
+      </div>
 
       {/* Hero */}
       <div className="relative rounded-2xl overflow-hidden h-56 bg-gradient-to-br from-brand-400 to-brand-700">

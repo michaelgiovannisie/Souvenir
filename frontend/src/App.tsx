@@ -10,6 +10,7 @@ import { StatsDashboard } from '@/pages/StatsDashboard'
 import { BucketListPage } from '@/pages/BucketListPage'
 import { MemoriesPage } from '@/pages/MemoriesPage'
 import { ProfilePage } from '@/pages/ProfilePage'
+import { TripPrintPage } from '@/pages/TripPrintPage'
 
 export default function App() {
   return (
@@ -20,6 +21,9 @@ export default function App() {
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
+        {/* Print route — no app chrome */}
+        <Route path="/trips/:id/print" element={<TripPrintPage />} />
+
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/map" element={<MapPage />} />
