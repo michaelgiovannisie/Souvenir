@@ -11,6 +11,7 @@ import { BucketListPage } from '@/pages/BucketListPage'
 import { MemoriesPage } from '@/pages/MemoriesPage'
 import { ProfilePage } from '@/pages/ProfilePage'
 import { TripPrintPage } from '@/pages/TripPrintPage'
+import { CalendarPage } from '@/pages/CalendarPage'
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
 
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/trips/:id" element={<TripDetail />} />
           <Route path="/memories" element={<MemoriesPage />} />
