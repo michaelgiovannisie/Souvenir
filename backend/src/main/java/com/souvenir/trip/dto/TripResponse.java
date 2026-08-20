@@ -17,6 +17,7 @@ public class TripResponse {
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final String coverPhotoUrl;
+    private final String notes;
     private final TripStatus status;
     private final int destinationCount;
     private final int memoryCount;

@@ -9,6 +9,7 @@ export interface Trip {
   startDate: string | null
   endDate: string | null
   coverPhotoUrl: string | null
+  notes: string | null
   status: TripStatus
   destinationCount: number
   memoryCount: number
@@ -57,6 +58,11 @@ export const tripsApi = {
 
   deleteTrip: async (id: string): Promise<void> => {
     await api.delete(`/trips/${id}`)
+  },
+
+  updateNotes: async (tripId: string, notes: string): Promise<Trip> => {
+    const { data } = await api.patch(`/trips/${tripId}/notes`, { notes })
+    return data.data
   },
 
   setCoverPhoto: async (tripId: string, photoId: string): Promise<Trip> => {

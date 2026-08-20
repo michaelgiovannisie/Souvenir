@@ -9,6 +9,7 @@ import com.souvenir.photo.domain.Photo;
 import com.souvenir.photo.repository.PhotoRepository;
 import com.souvenir.trip.domain.Trip;
 import com.souvenir.trip.domain.TripStatus;
+import com.souvenir.trip.dto.TripNotesRequest;
 import com.souvenir.trip.dto.TripRequest;
 import com.souvenir.trip.dto.TripResponse;
 import com.souvenir.trip.repository.TripRepository;
@@ -78,6 +79,14 @@ public class TripService {
     }
 
     @Transactional
+    public TripResponse updateNotes(UUID tripId, TripNotesRequest request, String email) {
+        Trip trip = getActiveTrip(tripId);
+        assertOwnership(trip, email);
+        trip.setNotes(request.getNotes());
+        return toResponse(tripRepository.save(trip));
+    }
+
+    @Transactional
     public TripResponse setCoverPhoto(UUID tripId, UUID photoId, String email) {
         Trip trip = getActiveTrip(tripId);
         assertOwnership(trip, email);
@@ -134,6 +143,7 @@ public class TripService {
                 .startDate(trip.getStartDate())
                 .endDate(trip.getEndDate())
                 .coverPhotoUrl(trip.getCoverPhotoUrl())
+                .notes(trip.getNotes())
                 .status(trip.getStatus())
                 .destinationCount(trip.getDestinations().size())
                 .memoryCount(trip.getMemories().size())

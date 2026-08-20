@@ -4,6 +4,7 @@ import com.souvenir.common.response.ApiResponse;
 import com.souvenir.common.response.PageResponse;
 import com.souvenir.trip.domain.TripStatus;
 import com.souvenir.trip.dto.CoverPhotoRequest;
+import com.souvenir.trip.dto.TripNotesRequest;
 import com.souvenir.trip.dto.TripRequest;
 import com.souvenir.trip.dto.TripResponse;
 import com.souvenir.trip.service.TripService;
@@ -72,6 +73,18 @@ public class TripController {
     ) {
         return ResponseEntity.ok(ApiResponse.ok(
                 tripService.updateTrip(id, request, userDetails.getUsername())
+        ));
+    }
+
+    @PatchMapping("/{id}/notes")
+    @Operation(summary = "Save notes / itinerary for a trip")
+    public ResponseEntity<ApiResponse<TripResponse>> updateNotes(
+            @PathVariable UUID id,
+            @RequestBody TripNotesRequest request,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                tripService.updateNotes(id, request, userDetails.getUsername())
         ));
     }
 

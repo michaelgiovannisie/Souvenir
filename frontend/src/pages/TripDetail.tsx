@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto } from '@/features/trips/hooks/useTrips'
@@ -11,8 +11,9 @@ import { DestinationsTab } from '@/features/destinations/components/Destinations
 import { MemoriesTab } from '@/features/memories/components/MemoriesTab'
 import { PackingListTab } from '@/features/packing/components/PackingListTab'
 import { usePacking } from '@/features/packing/hooks/usePacking'
+import { NotesTab } from '@/features/trips/components/NotesTab'
 
-type Tab = 'photos' | 'destinations' | 'memories' | 'packing'
+type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes'
 
 const statusColors = {
   PLANNED: 'bg-yellow-100 text-yellow-700',
@@ -67,7 +68,8 @@ export function TripDetail() {
     { key: 'photos',       label: 'Photos',   icon: Camera,   count: trip.photoCount },
     { key: 'destinations', label: 'Places',   icon: MapPin,   count: trip.destinationCount },
     { key: 'memories',     label: 'Memories', icon: BookOpen, count: trip.memoryCount },
-    { key: 'packing',      label: 'Packing',  icon: Package,  count: packingItems.length || undefined },
+    { key: 'packing',      label: 'Packing',  icon: Package,   count: packingItems.length || undefined },
+    { key: 'notes',        label: 'Notes',    icon: StickyNote, count: trip.notes ? 1 : undefined },
   ]
 
   return (
@@ -246,6 +248,10 @@ export function TripDetail() {
 
       {activeTab === 'packing' && (
         <PackingListTab tripId={id!} />
+      )}
+
+      {activeTab === 'notes' && (
+        <NotesTab tripId={id!} initialNotes={trip.notes} />
       )}
     </div>
   )

@@ -40,6 +40,9 @@ public class Trip extends BaseEntity {
     @Column(name = "cover_photo_url", length = 500)
     private String coverPhotoUrl;
 
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
     @Column(name = "cover_photo_public_id")
     private String coverPhotoPublicId;
 
