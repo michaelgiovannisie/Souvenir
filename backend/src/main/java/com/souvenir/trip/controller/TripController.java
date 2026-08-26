@@ -76,6 +76,16 @@ public class TripController {
         ));
     }
 
+    @PostMapping("/{id}/duplicate")
+    @Operation(summary = "Duplicate a trip (clones metadata and destinations, status resets to PLANNED)")
+    public ResponseEntity<ApiResponse<TripResponse>> duplicateTrip(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.created(tripService.duplicateTrip(id, userDetails.getUsername())));
+    }
+
     @PatchMapping("/{id}/notes")
     @Operation(summary = "Save notes / itinerary for a trip")
     public ResponseEntity<ApiResponse<TripResponse>> updateNotes(

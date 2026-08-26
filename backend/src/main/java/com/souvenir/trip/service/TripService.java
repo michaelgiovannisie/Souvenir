@@ -5,6 +5,8 @@ import com.souvenir.auth.repository.UserRepository;
 import com.souvenir.common.exception.ForbiddenException;
 import com.souvenir.common.exception.ResourceNotFoundException;
 import com.souvenir.common.response.PageResponse;
+import com.souvenir.destination.domain.Destination;
+import com.souvenir.destination.repository.DestinationRepository;
 import com.souvenir.photo.domain.Photo;
 import com.souvenir.photo.repository.PhotoRepository;
 import com.souvenir.trip.domain.Trip;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,6 +31,7 @@ public class TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
     private final PhotoRepository photoRepository;
+    private final DestinationRepository destinationRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<TripResponse> getUserTrips(String email, TripStatus status, int page, int size) {
@@ -109,6 +113,46 @@ public class TripService {
         trip.setCoverPhotoUrl(null);
         trip.setCoverPhotoPublicId(null);
         return toResponse(tripRepository.save(trip));
+    }
+
+    @Transactional
+    public TripResponse duplicateTrip(UUID tripId, String email) {
+        Trip original = getActiveTrip(tripId);
+        assertOwnership(original, email);
+        User user = original.getUser();
+
+        Trip copy = Trip.builder()
+                .user(user)
+                .title(original.getTitle() + " (Copy)")
+                .description(original.getDescription())
+                .startDate(original.getStartDate())
+                .endDate(original.getEndDate())
+                .status(TripStatus.PLANNED)
+                .build();
+
+        Trip saved = tripRepository.save(copy);
+
+        // Clone destinations (without arrival/departure dates — those are trip-specific)
+        List<Destination> destinations = destinationRepository.findAllByTripId(tripId);
+        for (Destination d : destinations) {
+            Destination newDest = Destination.builder()
+                    .trip(saved)
+                    .name(d.getName())
+                    .country(d.getCountry())
+                    .stateProvince(d.getStateProvince())
+                    .city(d.getCity())
+                    .latitude(d.getLatitude())
+                    .longitude(d.getLongitude())
+                    .type(d.getType())
+                    .notes(d.getNotes())
+                    .rating(d.getRating())
+                    .build();
+            destinationRepository.save(newDest);
+        }
+
+        // Re-fetch to get updated counts from DB
+        return toResponse(tripRepository.findActiveById(saved.getId())
+                .orElse(saved));
     }
 
     @Transactional

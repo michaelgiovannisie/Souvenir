@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote } from 'lucide-react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
-import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto } from '@/features/trips/hooks/useTrips'
+import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto, useDuplicateTrip } from '@/features/trips/hooks/useTrips'
 import { useTripPhotos } from '@/features/photos/hooks/usePhotos'
 import { PhotoUploader } from '@/features/photos/components/PhotoUploader'
 import { PhotoGallery } from '@/features/photos/components/PhotoGallery'
@@ -29,6 +29,7 @@ const statusLabels = {
 
 export function TripDetail() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<Tab>('photos')
   const [showUploader, setShowUploader] = useState(false)
 
@@ -37,6 +38,7 @@ export function TripDetail() {
   const { mutate: setCover, isPending: isSettingCover } = useSetCoverPhoto(id!)
   const { mutate: removeCover, isPending: isRemovingCover } = useRemoveCoverPhoto(id!)
   const { data: packingItems = [] } = usePacking(id!)
+  const { mutate: duplicate, isPending: isDuplicating } = useDuplicateTrip()
 
   if (tripLoading) {
     return (
@@ -83,16 +85,27 @@ export function TripDetail() {
           <ArrowLeft className="w-4 h-4" />
           All trips
         </Link>
-        <a
-          href={`/trips/${id}/print`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors"
-          title="Export as PDF"
-        >
-          <Download className="w-4 h-4" />
-          <span className="hidden sm:inline">Export PDF</span>
-        </a>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => duplicate(id!, { onSuccess: (t) => navigate(`/trips/${t.id}`) })}
+            disabled={isDuplicating}
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
+            title="Duplicate trip"
+          >
+            <Copy className="w-4 h-4" />
+            <span className="hidden sm:inline">{isDuplicating ? 'Duplicating…' : 'Duplicate'}</span>
+          </button>
+          <a
+            href={`/trips/${id}/print`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            title="Export as PDF"
+          >
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Export PDF</span>
+          </a>
+        </div>
       </div>
 
       {/* Hero */}

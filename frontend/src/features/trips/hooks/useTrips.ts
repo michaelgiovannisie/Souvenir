@@ -50,6 +50,14 @@ export function useDeleteTrip() {
   })
 }
 
+export function useDuplicateTrip() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => tripsApi.duplicateTrip(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: tripKeys.lists() }),
+  })
+}
+
 export function useSetCoverPhoto(tripId: string) {
   const qc = useQueryClient()
   return useMutation({

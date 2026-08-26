@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom'
-import { MapPin, Camera, BookOpen, Calendar } from 'lucide-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { MapPin, Camera, BookOpen, Calendar, Copy } from 'lucide-react'
 import { Trip } from '../api/tripsApi'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
+import { useDuplicateTrip } from '../hooks/useTrips'
 
 interface TripCardProps {
   trip: Trip
@@ -21,59 +22,86 @@ const statusLabels: Record<Trip['status'], string> = {
 }
 
 export function TripCard({ trip }: TripCardProps) {
+  const navigate = useNavigate()
+  const { mutate: duplicate, isPending } = useDuplicateTrip()
+
+  function handleDuplicate(e: React.MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    duplicate(trip.id, {
+      onSuccess: (newTrip) => navigate(`/trips/${newTrip.id}`),
+    })
+  }
+
   return (
-    <Link to={`/trips/${trip.id}`} className="block group">
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md hover:border-gray-300 transition-all duration-200">
-        {/* Cover image */}
-        <div className="h-40 bg-gradient-to-br from-brand-400 to-brand-600 relative overflow-hidden">
-          {trip.coverPhotoUrl ? (
-            <img
-              src={trip.coverPhotoUrl}
-              alt={trip.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-4xl opacity-60">🌍</div>
-          )}
-          <div className="absolute top-3 right-3">
-            <span className={clsx('px-2.5 py-1 rounded-full text-xs font-medium', statusColors[trip.status])}>
-              {statusLabels[trip.status]}
-            </span>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-1 group-hover:text-brand-600 transition-colors">
-            {trip.title}
-          </h3>
-
-          {(trip.startDate || trip.endDate) && (
-            <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-3">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>
-                {trip.startDate ? dayjs(trip.startDate).format('MMM D, YYYY') : '?'}
-                {trip.endDate ? ` — ${dayjs(trip.endDate).format('MMM D, YYYY')}` : ''}
+    <div className="relative group">
+      <Link to={`/trips/${trip.id}`} className="block">
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md hover:border-gray-300 transition-all duration-200">
+          {/* Cover image */}
+          <div className="h-40 bg-gradient-to-br from-brand-400 to-brand-600 relative overflow-hidden">
+            {trip.coverPhotoUrl ? (
+              <img
+                src={trip.coverPhotoUrl}
+                alt={trip.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-4xl opacity-60">🌍</div>
+            )}
+            <div className="absolute top-3 right-3">
+              <span className={clsx('px-2.5 py-1 rounded-full text-xs font-medium', statusColors[trip.status])}>
+                {statusLabels[trip.status]}
               </span>
             </div>
-          )}
+          </div>
 
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            <span className="flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5" />
-              {trip.destinationCount} {trip.destinationCount === 1 ? 'place' : 'places'}
-            </span>
-            <span className="flex items-center gap-1">
-              <Camera className="w-3.5 h-3.5" />
-              {trip.photoCount}
-            </span>
-            <span className="flex items-center gap-1">
-              <BookOpen className="w-3.5 h-3.5" />
-              {trip.memoryCount}
-            </span>
+          {/* Content */}
+          <div className="p-4">
+            <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-1 group-hover:text-brand-600 transition-colors">
+              {trip.title}
+            </h3>
+
+            {(trip.startDate || trip.endDate) && (
+              <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-3">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>
+                  {trip.startDate ? dayjs(trip.startDate).format('MMM D, YYYY') : '?'}
+                  {trip.endDate ? ` — ${dayjs(trip.endDate).format('MMM D, YYYY')}` : ''}
+                </span>
+              </div>
+            )}
+
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5" />
+                {trip.destinationCount} {trip.destinationCount === 1 ? 'place' : 'places'}
+              </span>
+              <span className="flex items-center gap-1">
+                <Camera className="w-3.5 h-3.5" />
+                {trip.photoCount}
+              </span>
+              <span className="flex items-center gap-1">
+                <BookOpen className="w-3.5 h-3.5" />
+                {trip.memoryCount}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+
+      {/* Duplicate button — hover reveal, bottom-right of card content */}
+      <button
+        onClick={handleDuplicate}
+        disabled={isPending}
+        title="Duplicate trip"
+        className={clsx(
+          'absolute bottom-4 right-4 p-1.5 rounded-lg bg-white border border-gray-200 shadow-sm',
+          'text-gray-400 hover:text-brand-600 hover:border-brand-300 transition-all duration-150',
+          'opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed'
+        )}
+      >
+        <Copy className="w-3.5 h-3.5" />
+      </button>
+    </div>
   )
 }

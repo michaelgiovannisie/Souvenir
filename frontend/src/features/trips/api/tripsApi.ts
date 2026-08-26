@@ -65,6 +65,11 @@ export const tripsApi = {
     return data.data
   },
 
+  duplicateTrip: async (id: string): Promise<Trip> => {
+    const { data } = await api.post(`/trips/${id}/duplicate`)
+    return data.data
+  },
+
   setCoverPhoto: async (tripId: string, photoId: string): Promise<Trip> => {
     const { data } = await api.patch(`/trips/${tripId}/cover-photo`, { photoId })
     return data.data
