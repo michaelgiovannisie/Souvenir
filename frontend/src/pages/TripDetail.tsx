@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy, Wallet } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto, useDuplicateTrip } from '@/features/trips/hooks/useTrips'
@@ -12,8 +12,10 @@ import { MemoriesTab } from '@/features/memories/components/MemoriesTab'
 import { PackingListTab } from '@/features/packing/components/PackingListTab'
 import { usePacking } from '@/features/packing/hooks/usePacking'
 import { NotesTab } from '@/features/trips/components/NotesTab'
+import { ExpensesTab } from '@/features/expenses/components/ExpensesTab'
+import { useExpenses } from '@/features/expenses/hooks/useExpenses'
 
-type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes'
+type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes' | 'expenses'
 
 const statusColors = {
   PLANNED: 'bg-yellow-100 text-yellow-700',
@@ -38,6 +40,7 @@ export function TripDetail() {
   const { mutate: setCover, isPending: isSettingCover } = useSetCoverPhoto(id!)
   const { mutate: removeCover, isPending: isRemovingCover } = useRemoveCoverPhoto(id!)
   const { data: packingItems = [] } = usePacking(id!)
+  const { data: expenses = [] } = useExpenses(id!)
   const { mutate: duplicate, isPending: isDuplicating } = useDuplicateTrip()
 
   if (tripLoading) {
@@ -72,6 +75,7 @@ export function TripDetail() {
     { key: 'memories',     label: 'Memories', icon: BookOpen, count: trip.memoryCount },
     { key: 'packing',      label: 'Packing',  icon: Package,   count: packingItems.length || undefined },
     { key: 'notes',        label: 'Notes',    icon: StickyNote, count: trip.notes ? 1 : undefined },
+    { key: 'expenses',     label: 'Expenses', icon: Wallet,     count: expenses.length || undefined },
   ]
 
   return (
@@ -265,6 +269,10 @@ export function TripDetail() {
 
       {activeTab === 'notes' && (
         <NotesTab tripId={id!} initialNotes={trip.notes} />
+      )}
+
+      {activeTab === 'expenses' && (
+        <ExpensesTab tripId={id!} />
       )}
     </div>
   )
