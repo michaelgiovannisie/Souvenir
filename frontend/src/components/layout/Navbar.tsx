@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { Map, Plane, BookHeart, ListChecks, BarChart2, LogOut, User, Search, CalendarDays } from 'lucide-react'
+import { Map, Plane, BookHeart, ListChecks, BarChart2, LogOut, User, Search, CalendarDays, Sparkles } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useLogout } from '@/features/auth/hooks/useAuth'
 import { clsx } from 'clsx'
@@ -12,7 +12,8 @@ const navItems = [
   { to: '/map',        label: 'Map',         icon: Map },
   { to: '/memories',   label: 'Memories',    icon: BookHeart },
   { to: '/bucket-list',label: 'Bucket List', icon: ListChecks },
-  { to: '/stats',      label: 'Stats',       icon: BarChart2 },
+  { to: '/stats',           label: 'Stats',       icon: BarChart2 },
+  { to: '/year-in-review',  label: 'Year',        icon: Sparkles  },
 ]
 
 export function Navbar() {

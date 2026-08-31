@@ -2,6 +2,7 @@ package com.souvenir.stats.controller;
 
 import com.souvenir.common.response.ApiResponse;
 import com.souvenir.stats.dto.StatsResponse;
+import com.souvenir.stats.dto.YearInReviewResponse;
 import com.souvenir.stats.service.StatsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -10,9 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/stats")
@@ -30,6 +30,18 @@ public class StatsController {
     ) {
         return ResponseEntity.ok(ApiResponse.ok(
                 statsService.getStats(userDetails.getUsername())
+        ));
+    }
+
+    @GetMapping("/year-in-review")
+    @Operation(summary = "Get year-in-review summary for a given year")
+    public ResponseEntity<ApiResponse<YearInReviewResponse>> getYearInReview(
+            @RequestParam(required = false) Integer year,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        int resolvedYear = year != null ? year : LocalDate.now().getYear();
+        return ResponseEntity.ok(ApiResponse.ok(
+                statsService.getYearInReview(userDetails.getUsername(), resolvedYear)
         ));
     }
 }
