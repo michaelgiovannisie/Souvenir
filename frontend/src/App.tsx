@@ -13,6 +13,7 @@ import { ProfilePage } from '@/pages/ProfilePage'
 import { TripPrintPage } from '@/pages/TripPrintPage'
 import { CalendarPage } from '@/pages/CalendarPage'
 import { YearInReviewPage } from '@/pages/YearInReviewPage'
+import { PhotoMapPage } from '@/pages/PhotoMapPage'
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/map" element={<MapPage />} />
+          <Route path="/photo-map" element={<PhotoMapPage />} />
           <Route path="/trips/:id" element={<TripDetail />} />
           <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/bucket-list" element={<BucketListPage />} />
