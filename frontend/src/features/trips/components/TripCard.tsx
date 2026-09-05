@@ -36,7 +36,7 @@ export function TripCard({ trip }: TripCardProps) {
   return (
     <div className="relative group">
       <Link to={`/trips/${trip.id}`} className="block">
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md hover:border-gray-300 transition-all duration-200">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md hover:border-gray-300 dark:border-gray-600 transition-all duration-200">
           {/* Cover image */}
           <div className="h-40 bg-gradient-to-br from-brand-400 to-brand-600 relative overflow-hidden">
             {trip.coverPhotoUrl ? (
@@ -57,12 +57,12 @@ export function TripCard({ trip }: TripCardProps) {
 
           {/* Content */}
           <div className="p-4">
-            <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-1 group-hover:text-brand-600 transition-colors">
+            <h3 className="font-semibold text-gray-900 dark:text-white text-lg leading-tight mb-1 group-hover:text-brand-600 transition-colors">
               {trip.title}
             </h3>
 
             {(trip.startDate || trip.endDate) && (
-              <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-3">
+              <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 mb-3">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>
                   {trip.startDate ? dayjs(trip.startDate).format('MMM D, YYYY') : '?'}
@@ -71,7 +71,7 @@ export function TripCard({ trip }: TripCardProps) {
               </div>
             )}
 
-            <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
               <span className="flex items-center gap-1">
                 <MapPin className="w-3.5 h-3.5" />
                 {trip.destinationCount} {trip.destinationCount === 1 ? 'place' : 'places'}
@@ -95,8 +95,8 @@ export function TripCard({ trip }: TripCardProps) {
         disabled={isPending}
         title="Duplicate trip"
         className={clsx(
-          'absolute bottom-4 right-4 p-1.5 rounded-lg bg-white border border-gray-200 shadow-sm',
-          'text-gray-400 hover:text-brand-600 hover:border-brand-300 transition-all duration-150',
+          'absolute bottom-4 right-4 p-1.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm',
+          'text-gray-400 dark:text-gray-500 hover:text-brand-600 hover:border-brand-300 transition-all duration-150',
           'opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed'
         )}
       >

@@ -35,10 +35,10 @@ export function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Welcome back, {user?.displayName} 👋
           </h1>
-          <p className="text-gray-500 mt-1">Here are all your trips</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">Here are all your trips</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -51,7 +51,7 @@ export function Dashboard() {
               'flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border transition-all',
               isGenerating
                 ? 'border-brand-200 text-brand-400 bg-brand-50 cursor-not-allowed'
-                : 'border-gray-200 text-gray-600 hover:border-brand-300 hover:text-brand-700 hover:bg-brand-50'
+                : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-brand-300 hover:text-brand-700 hover:bg-brand-50'
             )}
           >
             {isGenerating
@@ -83,7 +83,7 @@ export function Dashboard() {
               'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
               statusFilter === value
                 ? 'bg-brand-600 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
             )}
           >
             {label}
@@ -95,16 +95,16 @@ export function Dashboard() {
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-56 bg-gray-100 rounded-2xl animate-pulse" />
+            <div key={i} className="h-56 bg-gray-100 dark:bg-gray-700 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : isError ? (
-        <div className="text-center py-16 text-gray-500">Failed to load trips. Please try again.</div>
+        <div className="text-center py-16 text-gray-500 dark:text-gray-400">Failed to load trips. Please try again.</div>
       ) : data?.content.length === 0 ? (
         <div className="text-center py-24">
           <div className="text-6xl mb-4">✈️</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No trips yet</h3>
-          <p className="text-gray-500 mb-6">Start documenting your adventures</p>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No trips yet</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-6">Start documenting your adventures</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button>
               <Plus className="w-4 h-4 mr-1.5" />

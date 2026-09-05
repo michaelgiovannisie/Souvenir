@@ -10,12 +10,12 @@ function StatSkeleton() {
     <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-32 bg-gray-100 rounded-2xl animate-pulse" />
+          <div key={i} className="h-32 bg-gray-100 dark:bg-gray-700 rounded-2xl animate-pulse" />
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-48 bg-gray-100 rounded-2xl animate-pulse" />
+          <div key={i} className="h-48 bg-gray-100 dark:bg-gray-700 rounded-2xl animate-pulse" />
         ))}
       </div>
     </div>
@@ -40,7 +40,7 @@ function StatCard({ label, value, icon, gradient, sub }: StatCardProps) {
       </div>
 
       <div className="relative">
-        <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center mb-3">
+        <div className="w-9 h-9 rounded-xl bg-white dark:bg-gray-800/20 flex items-center justify-center mb-3">
           {icon}
         </div>
         <p className="text-3xl font-bold tracking-tight">{value}</p>
@@ -61,21 +61,21 @@ function TopCountries({ topCountries }: TopCountriesProps) {
   const max = topCountries[0].count
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-5">
-      <h3 className="font-semibold text-gray-900 mb-4">Most visited countries</h3>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+      <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Most visited countries</h3>
       <div className="space-y-3">
         {topCountries.map((item, i) => (
           <div key={item.country}>
             <div className="flex justify-between text-sm mb-1">
-              <span className="flex items-center gap-2 text-gray-700 font-medium">
-                <span className="text-gray-400 text-xs w-4">{i + 1}</span>
+              <span className="flex items-center gap-2 text-gray-700 dark:text-gray-200 font-medium">
+                <span className="text-gray-400 dark:text-gray-500 text-xs w-4">{i + 1}</span>
                 {item.country}
               </span>
-              <span className="text-gray-400 text-xs">
+              <span className="text-gray-400 dark:text-gray-500 text-xs">
                 {item.count} {item.count === 1 ? 'place' : 'places'}
               </span>
             </div>
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
               <div
                 className="h-full bg-brand-500 rounded-full transition-all duration-700"
                 style={{ width: `${(item.count / max) * 100}%` }}
@@ -98,10 +98,10 @@ function ContinentsBreakdown({ countries }: ContinentsProps) {
   const all = ['Africa', 'Asia', 'Europe', 'North America', 'Oceania', 'South America']
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-5">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-gray-900">Continents</h3>
-        <span className="text-2xl font-bold text-brand-600">{visited.size}<span className="text-sm text-gray-400 font-normal"> / 6</span></span>
+        <h3 className="font-semibold text-gray-900 dark:text-white">Continents</h3>
+        <span className="text-2xl font-bold text-brand-600">{visited.size}<span className="text-sm text-gray-400 dark:text-gray-500 font-normal"> / 6</span></span>
       </div>
       <div className="space-y-2">
         {all.map((continent) => {
@@ -111,11 +111,11 @@ function ContinentsBreakdown({ countries }: ContinentsProps) {
               key={continent}
               className={clsx(
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors',
-                isVisited ? 'bg-gray-50' : 'opacity-40'
+                isVisited ? 'bg-gray-50 dark:bg-gray-900/50' : 'opacity-40'
               )}
             >
               <span className="text-lg">{CONTINENT_EMOJI[continent]}</span>
-              <span className={clsx('text-sm font-medium flex-1', isVisited ? 'text-gray-800' : 'text-gray-400')}>
+              <span className={clsx('text-sm font-medium flex-1', isVisited ? 'text-gray-800 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500')}>
                 {continent}
               </span>
               {isVisited && (
@@ -143,9 +143,9 @@ function MilestoneCard({ icon, label, value, sub, color }: MilestoneProps) {
     <div className={clsx('rounded-2xl border p-4 flex items-start gap-3', color)}>
       <span className="text-2xl flex-shrink-0">{icon}</span>
       <div className="min-w-0">
-        <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-0.5">{label}</p>
-        <p className="font-bold text-gray-900 text-base leading-snug truncate">{value}</p>
-        {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium mb-0.5">{label}</p>
+        <p className="font-bold text-gray-900 dark:text-white text-base leading-snug truncate">{value}</p>
+        {sub && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{sub}</p>}
       </div>
     </div>
   )
@@ -155,16 +155,16 @@ function MilestoneCard({ icon, label, value, sub, color }: MilestoneProps) {
 function CountriesList({ countries }: { countries: string[] }) {
   if (countries.length === 0) return null
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-5">
-      <h3 className="font-semibold text-gray-900 mb-3">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+      <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
         Countries visited
-        <span className="ml-2 text-sm text-gray-400 font-normal">({countries.length})</span>
+        <span className="ml-2 text-sm text-gray-400 dark:text-gray-500 font-normal">({countries.length})</span>
       </h3>
       <div className="flex flex-wrap gap-2">
         {countries.map((c) => (
           <span
             key={c}
-            className="px-2.5 py-1 bg-gray-50 border border-gray-200 rounded-full text-xs text-gray-600"
+            className="px-2.5 py-1 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-full text-xs text-gray-600 dark:text-gray-300"
           >
             {c}
           </span>
@@ -181,13 +181,13 @@ export function StatsDashboard() {
 
   if (isLoading) return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Your travel stats</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Your travel stats</h1>
       <StatSkeleton />
     </div>
   )
 
   if (isError || !stats) return (
-    <div className="text-center py-24 text-gray-400">
+    <div className="text-center py-24 text-gray-400 dark:text-gray-500">
       <p>Failed to load stats. Please try again.</p>
     </div>
   )
@@ -198,8 +198,8 @@ export function StatsDashboard() {
   if (stats.totalTrips === 0) return (
     <div className="text-center py-32">
       <div className="text-6xl mb-4">✈️</div>
-      <h2 className="text-xl font-bold text-gray-900 mb-2">No stats yet</h2>
-      <p className="text-gray-500 text-sm">
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No stats yet</h2>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">
         Create your first trip to start tracking your travel journey.
       </p>
     </div>
@@ -209,8 +209,8 @@ export function StatsDashboard() {
     <div className="space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Your travel stats</h1>
-        <p className="text-gray-500 mt-1 text-sm">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Your travel stats</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
           {user?.displayName}'s journey so far
         </p>
       </div>
@@ -257,7 +257,7 @@ export function StatsDashboard() {
 
       {/* Milestones row */}
       <div>
-        <h2 className="text-base font-semibold text-gray-900 mb-3">Highlights</h2>
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-3">Highlights</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {stats.mostVisitedCountry && (
             <MilestoneCard
@@ -293,8 +293,8 @@ export function StatsDashboard() {
       </div>
 
       {/* Trip status breakdown */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-5">
-        <h3 className="font-semibold text-gray-900 mb-4">Trip breakdown</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Trip breakdown</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           {[
             { label: 'Completed', count: stats.completedTrips, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -303,7 +303,7 @@ export function StatsDashboard() {
           ].map(({ label, count, color, bg }) => (
             <div key={label} className={clsx('rounded-xl py-4', bg)}>
               <p className={clsx('text-2xl font-bold', color)}>{count}</p>
-              <p className="text-xs text-gray-500 mt-1 font-medium">{label}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">{label}</p>
             </div>
           ))}
         </div>

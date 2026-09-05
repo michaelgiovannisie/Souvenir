@@ -88,7 +88,7 @@ function Avatar({
         </button>
         {url && (
           <>
-            <span className="text-gray-300 text-xs">·</span>
+            <span className="text-gray-300 dark:text-gray-600 text-xs">·</span>
             <button
               onClick={onRemove}
               disabled={isUploading}
@@ -106,12 +106,12 @@ function Avatar({
 // ─── Section card ─────────────────────────────────────────────────────────────
 function Card({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex items-center gap-2 mb-5">
         <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center">
           {icon}
         </div>
-        <h2 className="font-semibold text-gray-900">{title}</h2>
+        <h2 className="font-semibold text-gray-900 dark:text-white">{title}</h2>
       </div>
       {children}
     </div>
@@ -264,9 +264,9 @@ function QuickStats() {
   return (
     <div className="grid grid-cols-4 gap-3">
       {items.map(({ label, value }) => (
-        <div key={label} className="bg-white rounded-2xl border border-gray-200 p-4 text-center">
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
-          <p className="text-xs text-gray-400 font-medium mt-0.5">{label}</p>
+        <div key={label} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 font-medium mt-0.5">{label}</p>
         </div>
       ))}
     </div>
@@ -282,9 +282,9 @@ export function ProfilePage() {
   if (isLoading || !profile) {
     return (
       <div className="space-y-4 animate-pulse max-w-2xl mx-auto">
-        <div className="h-8 bg-gray-200 rounded w-1/4" />
-        <div className="h-48 bg-gray-200 rounded-2xl" />
-        <div className="h-48 bg-gray-200 rounded-2xl" />
+        <div className="h-8 bg-gray-200 dark:bg-gray-600 rounded w-1/4" />
+        <div className="h-48 bg-gray-200 dark:bg-gray-600 rounded-2xl" />
+        <div className="h-48 bg-gray-200 dark:bg-gray-600 rounded-2xl" />
       </div>
     )
   }
@@ -293,12 +293,12 @@ export function ProfilePage() {
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-        <p className="text-gray-400 text-sm mt-1">{profile.email}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Profile</h1>
+        <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">{profile.email}</p>
       </div>
 
       {/* Avatar + stats */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col sm:flex-row items-center gap-6">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 flex flex-col sm:flex-row items-center gap-6">
         <Avatar
           url={profile.profilePhotoUrl}
           name={profile.displayName || profile.username}
@@ -307,9 +307,9 @@ export function ProfilePage() {
           isUploading={isUploading}
         />
         <div className="flex-1 min-w-0 text-center sm:text-left">
-          <h2 className="text-xl font-bold text-gray-900">{profile.displayName}</h2>
-          <p className="text-gray-400 text-sm">@{profile.username}</p>
-          <p className="text-gray-400 text-xs mt-1">{profile.email}</p>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{profile.displayName}</h2>
+          <p className="text-gray-400 dark:text-gray-500 text-sm">@{profile.username}</p>
+          <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">{profile.email}</p>
         </div>
       </div>
 

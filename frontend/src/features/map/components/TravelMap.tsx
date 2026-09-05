@@ -28,7 +28,7 @@ interface TravelMapProps {
 
 export function TravelMap({ pins, height = '500px' }: TravelMapProps) {
   return (
-    <div style={{ height }} className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+    <div style={{ height }} className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
       <MapContainer
         center={[20, 0]}
         zoom={2}
@@ -44,8 +44,8 @@ export function TravelMap({ pins, height = '500px' }: TravelMapProps) {
           <Marker key={pin.id} position={[pin.latitude, pin.longitude]}>
             <Popup>
               <div className="min-w-[160px]">
-                <p className="font-semibold text-gray-900">{pin.name}</p>
-                <p className="text-sm text-gray-500">{pin.country}</p>
+                <p className="font-semibold text-gray-900 dark:text-white">{pin.name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{pin.country}</p>
                 <Link
                   to={`/trips/${pin.tripId}`}
                   className="text-sm text-brand-600 hover:underline mt-1 block"

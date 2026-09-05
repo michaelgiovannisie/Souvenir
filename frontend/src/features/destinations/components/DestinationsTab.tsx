@@ -37,7 +37,7 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
     return (
       <div className="space-y-3">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-24 bg-gray-100 rounded-2xl animate-pulse" />
+          <div key={i} className="h-24 bg-gray-100 dark:bg-gray-700 rounded-2xl animate-pulse" />
         ))}
       </div>
     )
@@ -48,23 +48,23 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-base font-semibold text-gray-900">
+          <span className="text-base font-semibold text-gray-900 dark:text-white">
             {destinations.length} {destinations.length === 1 ? 'place' : 'places'}
           </span>
           {pinnedDestinations.length > 0 && (
-            <span className="text-xs text-gray-400">· {pinnedDestinations.length} pinned</span>
+            <span className="text-xs text-gray-400 dark:text-gray-500">· {pinnedDestinations.length} pinned</span>
           )}
         </div>
 
         <div className="flex items-center gap-2">
           {/* View toggle */}
           {pinnedDestinations.length > 0 && (
-            <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+            <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
               <button
                 onClick={() => setView('list')}
                 className={clsx(
                   'px-3 py-1.5 text-xs font-medium transition-colors',
-                  view === 'list' ? 'bg-brand-600 text-white' : 'text-gray-500 hover:bg-gray-50'
+                  view === 'list' ? 'bg-brand-600 text-white' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                 )}
               >
                 List
@@ -73,7 +73,7 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
                 onClick={() => setView('map')}
                 className={clsx(
                   'px-3 py-1.5 text-xs font-medium transition-colors flex items-center gap-1',
-                  view === 'map' ? 'bg-brand-600 text-white' : 'text-gray-500 hover:bg-gray-50'
+                  view === 'map' ? 'bg-brand-600 text-white' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                 )}
               >
                 <Map className="w-3 h-3" />
@@ -91,7 +91,7 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
 
       {/* Map view */}
       {view === 'map' && pinnedDestinations.length > 0 && (
-        <div className="mb-6 h-80 rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+        <div className="mb-6 h-80 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
           <MapContainer
             center={[pinnedDestinations[0].latitude!, pinnedDestinations[0].longitude!]}
             zoom={5}
@@ -108,7 +108,7 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
                 <Popup>
                   <div className="text-sm">
                     <p className="font-semibold">{d.name}</p>
-                    <p className="text-gray-500 text-xs">{d.country}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">{d.country}</p>
                   </div>
                 </Popup>
               </Marker>
@@ -121,8 +121,8 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
       {destinations.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-3">📍</div>
-          <p className="text-sm font-medium text-gray-500 mb-1">No places added yet</p>
-          <p className="text-xs text-gray-400 mb-6">Add the destinations you visited on this trip</p>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">No places added yet</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">Add the destinations you visited on this trip</p>
           <Button onClick={openAdd}>
             <Plus className="w-4 h-4 mr-1.5" />
             Add your first place
@@ -154,15 +154,15 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
       {/* Delete confirmation */}
       {deleteConfirmId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="font-semibold text-gray-900 mb-2">Remove this place?</h3>
-            <p className="text-sm text-gray-500 mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Remove this place?</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
               This will also remove any memories linked to this destination.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                className="flex-1 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Cancel
               </button>

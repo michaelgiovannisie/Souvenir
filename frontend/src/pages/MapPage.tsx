@@ -35,14 +35,14 @@ export function MapPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Travel Map</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Travel Map</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">
           {pins.length} {pins.length === 1 ? 'place' : 'places'} visited
         </p>
       </div>
 
       {isLoading ? (
-        <div className="h-[500px] bg-gray-100 rounded-xl animate-pulse" />
+        <div className="h-[500px] bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
       ) : (
         <TravelMap pins={pins} height="600px" />
       )}

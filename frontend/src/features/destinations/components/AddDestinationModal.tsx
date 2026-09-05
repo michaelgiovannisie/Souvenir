@@ -123,15 +123,15 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             {isEditing ? 'Edit destination' : 'Add destination'}
           </h2>
           <button
             onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -143,7 +143,7 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
 
             {/* Type picker */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Type</label>
               <Controller
                 name="type"
                 control={control}
@@ -157,7 +157,7 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
                         className={`px-3 py-1.5 rounded-full text-sm border transition-colors flex items-center gap-1.5 ${
                           field.value === value
                             ? 'bg-brand-600 border-brand-600 text-white'
-                            : 'border-gray-200 text-gray-600 hover:border-brand-300 hover:text-brand-700'
+                            : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-brand-300 hover:text-brand-700'
                         }`}
                       >
                         <span>{emoji}</span>
@@ -189,7 +189,7 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
 
             {/* Rating */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Rating</label>
               <Controller
                 name="rating"
                 control={control}
@@ -217,7 +217,7 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
                       <button
                         type="button"
                         onClick={() => field.onChange(null)}
-                        className="ml-2 text-xs text-gray-400 hover:text-gray-600"
+                        className="ml-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300"
                       >
                         Clear
                       </button>
@@ -230,22 +230,22 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
             {/* Map pin picker */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-200 flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-brand-500" />
                   Pin on map
-                  <span className="text-xs text-gray-400 font-normal">(click to place)</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 font-normal">(click to place)</span>
                 </label>
                 {pin && (
                   <button
                     type="button"
                     onClick={clearPin}
-                    className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+                    className="text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 transition-colors"
                   >
                     Clear pin
                   </button>
                 )}
               </div>
-              <div className="h-52 rounded-xl overflow-hidden border border-gray-200">
+              <div className="h-52 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
                 <MapContainer
                   center={pin ? [pin.lat, pin.lng] : [20, 0]}
                   zoom={pin ? 10 : 2}
@@ -261,7 +261,7 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
                 </MapContainer>
               </div>
               {pin && (
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                   {pin.lat.toFixed(5)}, {pin.lng.toFixed(5)}
                 </p>
               )}
@@ -269,18 +269,18 @@ export function AddDestinationModal({ tripId, editTarget, onClose }: AddDestinat
 
             {/* Notes */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Notes</label>
               <textarea
                 {...register('notes')}
                 rows={3}
                 placeholder="What made this place special?"
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 resize-none"
               />
             </div>
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-3 flex-shrink-0">
+          <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3 flex-shrink-0">
             <Button type="button" variant="secondary" onClick={onClose}>
               Cancel
             </Button>

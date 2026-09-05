@@ -96,21 +96,21 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
               <BookOpen className="w-4 h-4 text-amber-600" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {isEditing ? 'Edit memory' : 'New memory'}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -137,7 +137,7 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
               />
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Linked place
                 </label>
                 <Controller
@@ -147,7 +147,7 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
                     <select
                       value={field.value ?? ''}
                       onChange={(e) => field.onChange(e.target.value || null)}
-                      className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                      className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400"
                     >
                       <option value="">No specific place</option>
                       {destinations.map((d) => (
@@ -159,16 +159,16 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
                   )}
                 />
                 {destinations.length === 0 && (
-                  <p className="text-xs text-gray-400 mt-1">Add places in the Places tab first</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Add places in the Places tab first</p>
                 )}
               </div>
             </div>
 
             {/* Mood picker */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 How did you feel?
-                <span className="ml-1 text-xs text-gray-400 font-normal">optional</span>
+                <span className="ml-1 text-xs text-gray-400 dark:text-gray-500 font-normal">optional</span>
               </label>
               <Controller
                 name="mood"
@@ -186,7 +186,7 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
                             'flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-medium transition-all',
                             isSelected
                               ? 'bg-brand-50 border-brand-300 text-brand-700 shadow-sm'
-                              : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                           )}
                         >
                           <span>{emoji}</span>
@@ -201,14 +201,14 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
 
             {/* Tags */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 Tags
-                <span className="ml-1 text-xs text-gray-400 font-normal">optional · press Enter or comma to add</span>
+                <span className="ml-1 text-xs text-gray-400 dark:text-gray-500 font-normal">optional · press Enter or comma to add</span>
               </label>
               <div
                 className={clsx(
                   'flex flex-wrap gap-2 min-h-[42px] px-3 py-2 border rounded-xl transition-shadow',
-                  'focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-transparent border-gray-300'
+                  'focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-transparent border-gray-300 dark:border-gray-600'
                 )}
               >
                 {/* Existing chips */}
@@ -238,7 +238,7 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
                     onKeyDown={handleTagKeyDown}
                     onBlur={commitTag}
                     placeholder={currentTags.length === 0 ? 'food, hiking, culture…' : ''}
-                    className="flex-1 min-w-[120px] text-sm outline-none bg-transparent text-gray-700 placeholder-gray-400"
+                    className="flex-1 min-w-[120px] text-sm outline-none bg-transparent text-gray-700 dark:text-gray-200 placeholder-gray-400"
                   />
                 )}
               </div>
@@ -249,20 +249,20 @@ export function AddMemoryModal({ tripId, editTarget, onClose }: AddMemoryModalPr
 
             {/* Journal entry */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                 Journal entry
               </label>
               <textarea
                 {...register('journalEntry')}
                 rows={10}
                 placeholder="Write about what happened, how you felt, what you saw…"
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none leading-relaxed"
+                className="w-full px-3 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 resize-none leading-relaxed"
               />
             </div>
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-3 flex-shrink-0">
+          <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3 flex-shrink-0">
             <Button type="button" variant="secondary" onClick={onClose}>
               Cancel
             </Button>

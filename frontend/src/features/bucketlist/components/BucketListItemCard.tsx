@@ -32,15 +32,15 @@ export function BucketListItemCard({ item }: Props) {
       className={clsx(
         'group flex items-start gap-4 p-4 rounded-2xl border transition-all duration-200',
         item.completed
-          ? 'bg-gray-50 border-gray-200 opacity-75'
-          : 'bg-white border-gray-200 hover:border-brand-200 hover:shadow-sm'
+          ? 'bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700 opacity-75'
+          : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-brand-200 hover:shadow-sm'
       )}
     >
       {/* Checkbox toggle */}
       <button
         onClick={handleToggle}
         disabled={toggling}
-        className="mt-0.5 flex-shrink-0 text-gray-300 hover:text-brand-500 transition-colors disabled:opacity-50"
+        className="mt-0.5 flex-shrink-0 text-gray-300 dark:text-gray-600 hover:text-brand-500 transition-colors disabled:opacity-50"
         aria-label={item.completed ? 'Mark as pending' : 'Mark as completed'}
       >
         {toggling ? (
@@ -58,15 +58,15 @@ export function BucketListItemCard({ item }: Props) {
           <div className="min-w-0">
             <h3
               className={clsx(
-                'font-semibold text-gray-900 truncate leading-snug',
-                item.completed && 'line-through text-gray-400'
+                'font-semibold text-gray-900 dark:text-white truncate leading-snug',
+                item.completed && 'line-through text-gray-400 dark:text-gray-500'
               )}
             >
               {item.destinationName}
             </h3>
             <div className="flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3 h-3 text-gray-400 flex-shrink-0" />
-              <span className="text-xs text-gray-500 truncate">{item.country}</span>
+              <MapPin className="w-3 h-3 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+              <span className="text-xs text-gray-500 dark:text-gray-400 truncate">{item.country}</span>
             </div>
           </div>
 
@@ -78,7 +78,7 @@ export function BucketListItemCard({ item }: Props) {
               'flex-shrink-0 p-1.5 rounded-lg text-xs font-medium transition-all',
               confirmDelete
                 ? 'bg-red-100 text-red-600 hover:bg-red-200'
-                : 'text-gray-300 hover:text-red-400 hover:bg-red-50 opacity-0 group-hover:opacity-100'
+                : 'text-gray-300 dark:text-gray-600 hover:text-red-400 hover:bg-red-50 opacity-0 group-hover:opacity-100'
             )}
             title={confirmDelete ? 'Click again to confirm' : 'Delete'}
           >
@@ -94,7 +94,7 @@ export function BucketListItemCard({ item }: Props) {
 
         {/* Notes */}
         {item.notes && (
-          <p className="text-sm text-gray-500 mt-2 leading-relaxed line-clamp-2">{item.notes}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed line-clamp-2">{item.notes}</p>
         )}
 
         {/* Completed badge */}
@@ -109,7 +109,7 @@ export function BucketListItemCard({ item }: Props) {
 
         {/* Added date */}
         {!item.completed && (
-          <p className="text-xs text-gray-300 mt-2">
+          <p className="text-xs text-gray-300 dark:text-gray-600 mt-2">
             Added {dayjs(item.createdAt).format('MMM D, YYYY')}
           </p>
         )}

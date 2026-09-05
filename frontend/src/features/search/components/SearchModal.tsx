@@ -153,13 +153,13 @@ export function SearchModal({ isOpen, onClose }: Props) {
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
       {/* Panel */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
+      <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
 
         {/* Input row */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-100">
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-100 dark:border-gray-800">
           {isFetching
-            ? <Loader2 className="w-5 h-5 text-gray-400 animate-spin flex-shrink-0" />
-            : <Search className="w-5 h-5 text-gray-400 flex-shrink-0" />
+            ? <Loader2 className="w-5 h-5 text-gray-400 dark:text-gray-500 animate-spin flex-shrink-0" />
+            : <Search className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
           }
           <input
             ref={inputRef}
@@ -168,14 +168,14 @@ export function SearchModal({ isOpen, onClose }: Props) {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search trips, places, memories…"
-            className="flex-1 text-sm text-gray-900 placeholder-gray-400 outline-none bg-transparent"
+            className="flex-1 text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none bg-transparent"
           />
           {query && (
-            <button onClick={() => setQuery('')} className="text-gray-400 hover:text-gray-600 transition-colors">
+            <button onClick={() => setQuery('')} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
               <X className="w-4 h-4" />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs text-gray-400 bg-gray-100 rounded border border-gray-200">
+          <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-700">
             Esc
           </kbd>
         </div>
@@ -183,12 +183,12 @@ export function SearchModal({ isOpen, onClose }: Props) {
         {/* Results */}
         <div className="max-h-[60vh] overflow-y-auto">
           {!debouncedQuery || debouncedQuery.length < 2 ? (
-            <div className="py-12 text-center text-sm text-gray-400">
+            <div className="py-12 text-center text-sm text-gray-400 dark:text-gray-500">
               Type at least 2 characters to search
             </div>
           ) : results.length === 0 && !isFetching ? (
-            <div className="py-12 text-center text-sm text-gray-400">
-              No results for <span className="font-medium text-gray-600">"{debouncedQuery}"</span>
+            <div className="py-12 text-center text-sm text-gray-400 dark:text-gray-500">
+              No results for <span className="font-medium text-gray-600 dark:text-gray-300">"{debouncedQuery}"</span>
             </div>
           ) : (
             <div className="py-2">
@@ -198,8 +198,8 @@ export function SearchModal({ isOpen, onClose }: Props) {
                   <div key={kind}>
                     {/* Section header */}
                     <div className="flex items-center gap-2 px-4 py-1.5 mt-1">
-                      <Icon className="w-3.5 h-3.5 text-gray-400" />
-                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <Icon className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
+                      <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
                         {KIND_LABELS[kind]}
                       </span>
                     </div>
@@ -217,15 +217,15 @@ export function SearchModal({ isOpen, onClose }: Props) {
                           onMouseEnter={() => setCursor(idx)}
                           className={clsx(
                             'w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors',
-                            isActive ? 'bg-brand-50' : 'hover:bg-gray-50'
+                            isActive ? 'bg-brand-50 dark:bg-brand-900/30' : 'hover:bg-gray-50 dark:hover:bg-gray-700'
                           )}
                         >
                           {/* Left icon / thumbnail */}
-                          <div className="flex-shrink-0 w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center bg-gray-100">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center bg-gray-100 dark:bg-gray-700">
                             {result.kind === 'trip' && result.coverUrl ? (
                               <img src={result.coverUrl} alt="" className="w-full h-full object-cover" />
                             ) : (
-                              <Icon className={clsx('w-4 h-4', isActive ? 'text-brand-500' : 'text-gray-400')} />
+                              <Icon className={clsx('w-4 h-4', isActive ? 'text-brand-500' : 'text-gray-400 dark:text-gray-500')} />
                             )}
                           </div>
 
@@ -238,7 +238,7 @@ export function SearchModal({ isOpen, onClose }: Props) {
                               )}
                               <span className={clsx(
                                 'text-sm font-medium truncate',
-                                result.kind === 'bucket' && result.done ? 'line-through text-gray-400' : 'text-gray-900'
+                                result.kind === 'bucket' && result.done ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-white'
                               )}>
                                 {result.label}
                               </span>
@@ -247,7 +247,7 @@ export function SearchModal({ isOpen, onClose }: Props) {
                                 <span className="text-xs text-brand-500 font-medium flex-shrink-0">✓ Visited</span>
                               )}
                             </div>
-                            <p className="text-xs text-gray-400 truncate mt-0.5">{result.sub}</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">{result.sub}</p>
                           </div>
 
                           {/* Right metadata */}
@@ -258,7 +258,7 @@ export function SearchModal({ isOpen, onClose }: Props) {
                               </span>
                             )}
                             {result.kind === 'memory' && result.date && (
-                              <span className="text-xs text-gray-400 flex items-center gap-1">
+                              <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
                                 {dayjs(result.date).format('MMM YYYY')}
                               </span>
@@ -276,10 +276,10 @@ export function SearchModal({ isOpen, onClose }: Props) {
 
         {/* Footer hint */}
         {results.length > 0 && (
-          <div className="px-4 py-2.5 border-t border-gray-100 flex items-center gap-4 text-xs text-gray-400">
-            <span><kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200">↑↓</kbd> navigate</span>
-            <span><kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200">↵</kbd> open</span>
-            <span><kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200">Esc</kbd> close</span>
+          <div className="px-4 py-2.5 border-t border-gray-100 dark:border-gray-800 flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
+            <span><kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-700">↑↓</kbd> navigate</span>
+            <span><kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-700">↵</kbd> open</span>
+            <span><kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-700">Esc</kbd> close</span>
             <span className="ml-auto">{data?.totalResults} result{data?.totalResults !== 1 ? 's' : ''}</span>
           </div>
         )}

@@ -31,12 +31,12 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
         {/* Dot */}
         <div className="w-3 h-3 mt-1 rounded-full bg-brand-500 border-2 border-white ring-2 ring-brand-200 z-10 flex-shrink-0" />
         {/* Line down */}
-        {!isLast && <div className="flex-1 w-px bg-gray-200 mt-1" />}
+        {!isLast && <div className="flex-1 w-px bg-gray-200 dark:bg-gray-600 mt-1" />}
       </div>
 
       {/* Card */}
       <div className="group flex-1 pb-8">
-        <div className="bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 hover:shadow-md hover:border-gray-300 dark:border-gray-600 transition-all duration-200">
 
           {/* Header row */}
           <div className="flex items-start justify-between gap-3 mb-3">
@@ -48,7 +48,7 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
                 </p>
               )}
               {/* Title + mood emoji */}
-              <h3 className="font-semibold text-gray-900 leading-snug flex items-center gap-1.5">
+              <h3 className="font-semibold text-gray-900 dark:text-white leading-snug flex items-center gap-1.5">
                 {m.mood && MOOD_MAP[m.mood] && (
                   <span title={MOOD_MAP[m.mood].label}>{MOOD_MAP[m.mood].emoji}</span>
                 )}
@@ -60,13 +60,13 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
               <button
                 onClick={() => onEdit(m)}
-                className="p-1.5 text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
+                className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
               >
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => onDelete(m.id)}
-                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
@@ -90,7 +90,7 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
           {m.journalEntry ? (
             <div>
               <p className={clsx(
-                'text-sm text-gray-600 leading-relaxed whitespace-pre-wrap',
+                'text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap',
                 !expanded && isLong && 'line-clamp-none'
               )}>
                 {displayText}
@@ -109,7 +109,7 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
               )}
             </div>
           ) : (
-            <p className="text-sm text-gray-400 italic">No journal entry written yet.</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 italic">No journal entry written yet.</p>
           )}
 
           {/* Tags */}
@@ -118,7 +118,7 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
               {m.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-xs text-gray-500 font-medium"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-xs text-gray-500 dark:text-gray-400 font-medium"
                 >
                   <Tag className="w-2.5 h-2.5" />
                   {tag}
@@ -129,7 +129,7 @@ export function MemoryCard({ memory: m, isLast, onEdit, onDelete }: MemoryCardPr
 
           {/* Photo count */}
           {m.photoCount > 0 && (
-            <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5 text-xs text-gray-400">
+            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
               <Camera className="w-3.5 h-3.5" />
               {m.photoCount} {m.photoCount === 1 ? 'photo' : 'photos'} attached
             </div>

@@ -46,16 +46,16 @@ export function TripDetail() {
   if (tripLoading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-64 bg-gray-200 rounded-2xl" />
-        <div className="h-8 bg-gray-200 rounded w-1/3" />
-        <div className="h-4 bg-gray-200 rounded w-1/4" />
+        <div className="h-64 bg-gray-200 dark:bg-gray-600 rounded-2xl" />
+        <div className="h-8 bg-gray-200 dark:bg-gray-600 rounded w-1/3" />
+        <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-1/4" />
       </div>
     )
   }
 
   if (!trip) {
     return (
-      <div className="text-center py-24 text-gray-400">
+      <div className="text-center py-24 text-gray-400 dark:text-gray-500">
         <p>Trip not found.</p>
         <Link to="/dashboard" className="text-brand-600 hover:underline text-sm mt-2 block">
           Back to trips
@@ -84,7 +84,7 @@ export function TripDetail() {
       <div className="flex items-center justify-between">
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-200 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           All trips
@@ -93,7 +93,7 @@ export function TripDetail() {
           <button
             onClick={() => duplicate(id!, { onSuccess: (t) => navigate(`/trips/${t.id}`) })}
             disabled={isDuplicating}
-            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 transition-colors disabled:opacity-50"
             title="Duplicate trip"
           >
             <Copy className="w-4 h-4" />
@@ -103,7 +103,7 @@ export function TripDetail() {
             href={`/trips/${id}/print`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 transition-colors"
             title="Export as PDF"
           >
             <Download className="w-4 h-4" />
@@ -169,11 +169,11 @@ export function TripDetail() {
 
       {/* Description */}
       {trip.description && (
-        <p className="text-gray-600 text-sm leading-relaxed">{trip.description}</p>
+        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{trip.description}</p>
       )}
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 dark:border-gray-700">
         <div className="flex gap-1">
           {tabs.map(({ key, label, icon: Icon, count }) => (
             <button
@@ -183,7 +183,7 @@ export function TripDetail() {
                 'flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px',
                 activeTab === key
                   ? 'border-brand-600 text-brand-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-200 hover:border-gray-300 dark:border-gray-600'
               )}
             >
               <Icon className="w-4 h-4" />
@@ -192,7 +192,7 @@ export function TripDetail() {
                 <span
                   className={clsx(
                     'px-1.5 py-0.5 rounded-full text-xs',
-                    activeTab === key ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 text-gray-500'
+                    activeTab === key ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                   )}
                 >
                   {count}
@@ -208,7 +208,7 @@ export function TripDetail() {
         <div className="space-y-6">
           {/* Upload toggle */}
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               {photos.length} {photos.length === 1 ? 'photo' : 'photos'}
             </h2>
             <button
@@ -216,7 +216,7 @@ export function TripDetail() {
               className={clsx(
                 'px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2',
                 showUploader
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
                   : 'bg-brand-600 text-white hover:bg-brand-700'
               )}
             >
@@ -227,7 +227,7 @@ export function TripDetail() {
 
           {/* Uploader */}
           {showUploader && (
-            <div className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+            <div className="bg-gray-50 dark:bg-gray-900/50 rounded-2xl p-4 border border-gray-200 dark:border-gray-700">
               <PhotoUploader tripId={id!} />
             </div>
           )}
@@ -238,7 +238,7 @@ export function TripDetail() {
               {[...Array(8)].map((_, i) => (
                 <div
                   key={i}
-                  className="break-inside-avoid rounded-xl bg-gray-200 animate-pulse"
+                  className="break-inside-avoid rounded-xl bg-gray-200 dark:bg-gray-600 animate-pulse"
                   style={{ height: `${120 + (i % 3) * 60}px` }}
                 />
               ))}

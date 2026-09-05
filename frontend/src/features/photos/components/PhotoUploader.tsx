@@ -138,8 +138,8 @@ export function PhotoUploader({ tripId }: PhotoUploaderProps) {
           isDragging
             ? 'border-brand-400 bg-brand-50'
             : hasFiles
-            ? 'border-gray-200 bg-white'
-            : 'border-gray-300 bg-gray-50 hover:border-brand-400 hover:bg-brand-50 cursor-pointer',
+            ? 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+            : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 hover:border-brand-400 hover:bg-brand-50 cursor-pointer',
           !hasFiles && 'flex flex-col items-center justify-center py-16'
         )}
       >
@@ -158,11 +158,11 @@ export function PhotoUploader({ tripId }: PhotoUploaderProps) {
             <div className="mx-auto w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center mb-4">
               <ImagePlus className="w-7 h-7 text-brand-600" />
             </div>
-            <p className="text-sm font-medium text-gray-700">
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
               Drop photos here, or{' '}
               <span className="text-brand-600">browse</span>
             </p>
-            <p className="text-xs text-gray-400 mt-1">JPEG, PNG, WebP, HEIC · Max 10 MB each</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">JPEG, PNG, WebP, HEIC · Max 10 MB each</p>
           </div>
         ) : (
           /* File list */
@@ -181,7 +181,7 @@ export function PhotoUploader({ tripId }: PhotoUploaderProps) {
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="w-full py-3 rounded-xl border-2 border-dashed border-gray-200 text-sm text-gray-400 hover:border-brand-400 hover:text-brand-600 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm text-gray-400 dark:text-gray-500 hover:border-brand-400 hover:text-brand-600 transition-colors flex items-center justify-center gap-2"
             >
               <Upload className="w-4 h-4" />
               Add more photos
@@ -222,18 +222,18 @@ function FileRow({ entry, onCaptionChange, onRemove, onRetry }: FileRowProps) {
     <div
       className={clsx(
         'flex gap-3 p-3 rounded-xl border transition-colors',
-        isDone ? 'border-green-200 bg-green-50' : isError ? 'border-red-200 bg-red-50' : 'border-gray-100 bg-gray-50'
+        isDone ? 'border-green-200 bg-green-50' : isError ? 'border-red-200 bg-red-50' : 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50'
       )}
     >
       {/* Thumbnail */}
-      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
+      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200 dark:bg-gray-600">
         <img src={entry.preview} alt="" className="w-full h-full object-cover" />
       </div>
 
       {/* Details */}
       <div className="flex-1 min-w-0 space-y-2">
-        <p className="text-sm font-medium text-gray-800 truncate">{entry.file.name}</p>
-        <p className="text-xs text-gray-400">{(entry.file.size / 1024 / 1024).toFixed(1)} MB</p>
+        <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{entry.file.name}</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500">{(entry.file.size / 1024 / 1024).toFixed(1)} MB</p>
 
         {/* Caption input — only when not done */}
         {!isDone && (
@@ -243,13 +243,13 @@ function FileRow({ entry, onCaptionChange, onRemove, onRetry }: FileRowProps) {
             value={entry.caption}
             onChange={(e) => onCaptionChange(e.target.value)}
             disabled={isUploading}
-            className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-brand-400 disabled:opacity-50"
+            className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-brand-400 disabled:opacity-50"
           />
         )}
 
         {/* Progress bar */}
         {isUploading && (
-          <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
             <div
               className="h-full bg-brand-500 rounded-full transition-all duration-300"
               style={{ width: `${entry.progress}%` }}
@@ -286,7 +286,7 @@ function FileRow({ entry, onCaptionChange, onRemove, onRetry }: FileRowProps) {
         <button
           type="button"
           onClick={onRemove}
-          className="flex-shrink-0 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-lg transition-colors"
+          className="flex-shrink-0 p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
         >
           <X className="w-4 h-4" />
         </button>

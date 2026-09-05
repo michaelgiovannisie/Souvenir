@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, MapPin, Camera, BookOpen, Clock, Globe, Plan
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useYearInReview } from '@/features/stats/hooks/useStats'
+import { useDarkMode } from '@/hooks/useDarkMode'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -48,15 +49,15 @@ function StatCard({ value, label, icon: Icon, accent = false }: {
   return (
     <div className={clsx(
       'rounded-2xl p-5 flex flex-col gap-1',
-      accent ? 'bg-brand-600 text-white' : 'bg-white border border-gray-200'
+      accent ? 'bg-brand-600 text-white' : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
     )}>
       <div className={clsx('w-8 h-8 rounded-xl flex items-center justify-center mb-1',
-        accent ? 'bg-white/20' : 'bg-brand-50'
+        accent ? 'bg-white/20' : 'bg-brand-50 dark:bg-brand-900/30'
       )}>
         <Icon className={clsx('w-4 h-4', accent ? 'text-white' : 'text-brand-600')} />
       </div>
-      <p className={clsx('text-2xl font-bold', accent ? 'text-white' : 'text-gray-900')}>{value}</p>
-      <p className={clsx('text-xs font-medium', accent ? 'text-white/70' : 'text-gray-500')}>{label}</p>
+      <p className={clsx('text-2xl font-bold', accent ? 'text-white' : 'text-gray-900 dark:text-white')}>{value}</p>
+      <p className={clsx('text-xs font-medium', accent ? 'text-white/70' : 'text-gray-500 dark:text-gray-400')}>{label}</p>
     </div>
   )
 }
@@ -68,6 +69,7 @@ export function YearInReviewPage() {
   const [year, setYear] = useState(currentYear)
   const { data, isLoading } = useYearInReview(year)
 
+  const { isDark } = useDarkMode()
   const maxMonthActivity = data ? Math.max(...data.monthlyActivity, 1) : 1
   const totalMoods = data ? Object.values(data.moodBreakdown).reduce((a, b) => a + b, 0) : 0
 
@@ -76,23 +78,23 @@ export function YearInReviewPage() {
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Year in Review</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Your travel story, one year at a time.</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Year in Review</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Your travel story, one year at a time.</p>
         </div>
 
         {/* Year stepper */}
-        <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-xl p-1 shadow-sm">
+        <div className="flex items-center gap-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1 shadow-sm">
           <button
             onClick={() => setYear(y => y - 1)}
-            className="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors"
+            className="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="text-sm font-semibold text-gray-900 px-3 tabular-nums">{year}</span>
+          <span className="text-sm font-semibold text-gray-900 dark:text-white px-3 tabular-nums">{year}</span>
           <button
             onClick={() => setYear(y => y + 1)}
             disabled={year >= currentYear}
-            className="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -103,10 +105,10 @@ export function YearInReviewPage() {
       {isLoading && (
         <div className="space-y-4 animate-pulse">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[...Array(6)].map((_, i) => <div key={i} className="h-28 bg-gray-100 rounded-2xl" />)}
+            {[...Array(6)].map((_, i) => <div key={i} className="h-28 bg-gray-100 dark:bg-gray-700 rounded-2xl" />)}
           </div>
-          <div className="h-32 bg-gray-100 rounded-2xl" />
-          <div className="h-40 bg-gray-100 rounded-2xl" />
+          <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-2xl" />
+          <div className="h-40 bg-gray-100 dark:bg-gray-700 rounded-2xl" />
         </div>
       )}
 
@@ -114,9 +116,9 @@ export function YearInReviewPage() {
         <>
           {/* ── Hero banner ──────────────────────────────────────────────────── */}
           {data.tripsCount === 0 ? (
-            <div className="text-center py-20 text-gray-400">
+            <div className="text-center py-20 text-gray-400 dark:text-gray-500">
               <p className="text-5xl mb-4">🗺️</p>
-              <p className="text-lg font-semibold text-gray-500">No trips in {year}</p>
+              <p className="text-lg font-semibold text-gray-500 dark:text-gray-400">No trips in {year}</p>
               <p className="text-sm mt-1">Add some trips with dates that fall in {year} and they'll appear here.</p>
             </div>
           ) : (
@@ -132,8 +134,8 @@ export function YearInReviewPage() {
               </div>
 
               {/* ── Monthly activity ───────────────────────────────────────── */}
-              <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h2 className="text-sm font-semibold text-gray-700 mb-5">Monthly activity</h2>
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
+                <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-5">Monthly activity</h2>
                 <div className="grid grid-cols-12 gap-1.5">
                   {data.monthlyActivity.map((count, i) => {
                     const intensity = count === 0 ? 0 : Math.max(0.15, count / maxMonthActivity)
@@ -146,11 +148,11 @@ export function YearInReviewPage() {
                             height: '48px',
                             backgroundColor: isActive
                               ? `rgba(37, 99, 235, ${intensity})`
-                              : '#f3f4f6',
+                              : isDark ? '#1f2937' : '#f3f4f6',
                           }}
                           title={`${MONTH_FULL[i]}: ${count} trip${count !== 1 ? 's' : ''}`}
                         />
-                        <span className="text-xs text-gray-400 font-medium">{MONTHS[i]}</span>
+                        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">{MONTHS[i]}</span>
                       </div>
                     )
                   })}
@@ -159,17 +161,17 @@ export function YearInReviewPage() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {/* ── Countries visited ──────────────────────────────────── */}
-                <div className="bg-white border border-gray-200 rounded-2xl p-6">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-sm font-semibold text-gray-700">Countries visited</h2>
+                    <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Countries visited</h2>
                     {data.topCountry && (
-                      <span className="text-xs text-gray-400">
-                        🏆 Most visited: <span className="font-medium text-gray-600">{data.topCountry}</span>
+                      <span className="text-xs text-gray-400 dark:text-gray-500">
+                        🏆 Most visited: <span className="font-medium text-gray-600 dark:text-gray-300">{data.topCountry}</span>
                       </span>
                     )}
                   </div>
                   {data.countriesVisited.length === 0 ? (
-                    <p className="text-sm text-gray-400 italic">No destinations logged.</p>
+                    <p className="text-sm text-gray-400 dark:text-gray-500 italic">No destinations logged.</p>
                   ) : (
                     <div className="flex flex-wrap gap-2">
                       {data.countriesVisited.map((c) => (
@@ -178,8 +180,8 @@ export function YearInReviewPage() {
                           className={clsx(
                             'px-3 py-1 rounded-full text-xs font-medium',
                             c === data.topCountry
-                              ? 'bg-brand-100 text-brand-700 ring-1 ring-brand-300'
-                              : 'bg-gray-100 text-gray-600'
+                              ? 'bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 ring-1 ring-brand-300 dark:ring-brand-700'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                           )}
                         >
                           {c}
@@ -190,10 +192,10 @@ export function YearInReviewPage() {
                 </div>
 
                 {/* ── Mood breakdown ─────────────────────────────────────── */}
-                <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                  <h2 className="text-sm font-semibold text-gray-700 mb-4">Memory moods</h2>
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
+                  <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4">Memory moods</h2>
                   {Object.keys(data.moodBreakdown).length === 0 ? (
-                    <p className="text-sm text-gray-400 italic">No moods logged in memories this year.</p>
+                    <p className="text-sm text-gray-400 dark:text-gray-500 italic">No moods logged in memories this year.</p>
                   ) : (
                     <div className="space-y-2.5">
                       {Object.entries(data.moodBreakdown).slice(0, 6).map(([mood, count]) => (
@@ -203,12 +205,12 @@ export function YearInReviewPage() {
                           </span>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-0.5">
-                              <span className="text-xs font-medium text-gray-600 capitalize">
+                              <span className="text-xs font-medium text-gray-600 dark:text-gray-300 capitalize">
                                 {mood.charAt(0) + mood.slice(1).toLowerCase()}
                               </span>
-                              <span className="text-xs text-gray-400">{count}</span>
+                              <span className="text-xs text-gray-400 dark:text-gray-500">{count}</span>
                             </div>
-                            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-brand-400 rounded-full transition-all"
                                 style={{ width: `${(count / totalMoods) * 100}%` }}
@@ -224,13 +226,13 @@ export function YearInReviewPage() {
 
               {/* ── Expenses ───────────────────────────────────────────────── */}
               {Object.keys(data.expenseTotals).length > 0 && (
-                <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                  <h2 className="text-sm font-semibold text-gray-700 mb-4">Total spent in {year}</h2>
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
+                  <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4">Total spent in {year}</h2>
                   <div className="flex flex-wrap gap-4">
                     {Object.entries(data.expenseTotals).map(([currency, total]) => (
-                      <div key={currency} className="bg-brand-50 border border-brand-100 rounded-xl px-5 py-3">
-                        <p className="text-xl font-bold text-brand-800">{fmt(total, currency)}</p>
-                        <p className="text-xs text-brand-500 mt-0.5">{currency}</p>
+                      <div key={currency} className="bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800 rounded-xl px-5 py-3">
+                        <p className="text-xl font-bold text-brand-800 dark:text-brand-200">{fmt(total, currency)}</p>
+                        <p className="text-xs text-brand-500 dark:text-brand-400 mt-0.5">{currency}</p>
                       </div>
                     ))}
                   </div>
@@ -239,7 +241,7 @@ export function YearInReviewPage() {
 
               {/* ── Trips of the year ──────────────────────────────────────── */}
               <div>
-                <h2 className="text-sm font-semibold text-gray-700 mb-4">
+                <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4">
                   {data.tripsCount} {data.tripsCount === 1 ? 'trip' : 'trips'} in {year}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -247,7 +249,7 @@ export function YearInReviewPage() {
                     <Link
                       key={trip.id}
                       to={`/trips/${trip.id}`}
-                      className="group block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md hover:border-gray-300 transition-all duration-200"
+                      className="group block bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:shadow-md hover:border-gray-300 dark:border-gray-600 transition-all duration-200"
                     >
                       {/* Cover */}
                       <div className="h-36 bg-gradient-to-br from-brand-400 to-brand-600 relative overflow-hidden">
@@ -268,10 +270,10 @@ export function YearInReviewPage() {
                       </div>
                       {/* Info */}
                       <div className="p-4">
-                        <h3 className="font-semibold text-gray-900 leading-tight group-hover:text-brand-600 transition-colors">
+                        <h3 className="font-semibold text-gray-900 dark:text-white leading-tight group-hover:text-brand-600 transition-colors">
                           {trip.title}
                         </h3>
-                        <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                        <div className="flex items-center gap-3 mt-2 text-xs text-gray-400 dark:text-gray-500">
                           {(trip.startDate || trip.endDate) && (
                             <span>
                               {trip.startDate ? dayjs(trip.startDate).format('MMM D') : '?'}

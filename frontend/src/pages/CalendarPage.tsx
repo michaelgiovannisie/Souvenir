@@ -134,21 +134,21 @@ function WeekRow({ week, trips }: { week: CalDay[]; trips: Trip[] }) {
   const eventsHeight = visibleLaneCount * (LANE_H + LANE_GAP) + (hasOverflow ? 20 : 6)
 
   return (
-    <div className="border-b border-gray-100 last:border-0">
+    <div className="border-b border-gray-100 dark:border-gray-800 last:border-0">
       {/* Day number cells */}
       <div className="grid grid-cols-7">
         {week.map((day) => (
           <div
             key={day.date.valueOf()}
             className={clsx(
-              'px-1.5 pt-1.5 pb-0.5 border-r border-gray-100 last:border-0',
+              'px-1.5 pt-1.5 pb-0.5 border-r border-gray-100 dark:border-gray-800 last:border-0',
               !day.inMonth && 'opacity-30'
             )}
           >
             <span
               className={clsx(
                 'inline-flex w-6 h-6 items-center justify-center rounded-full text-xs font-medium',
-                day.isToday ? 'bg-brand-600 text-white' : 'text-gray-600'
+                day.isToday ? 'bg-brand-600 text-white' : 'text-gray-600 dark:text-gray-300'
               )}
             >
               {day.date.date()}
@@ -188,7 +188,7 @@ function WeekRow({ week, trips }: { week: CalDay[]; trips: Trip[] }) {
           .map((b) => (
             <span
               key={`ov-${b.startCol}`}
-              className="absolute text-[10px] text-gray-400 font-medium"
+              className="absolute text-[10px] text-gray-400 dark:text-gray-500 font-medium"
               style={{
                 left: `calc(${(b.startCol / 7) * 100}% + 6px)`,
                 top: MAX_LANES * (LANE_H + LANE_GAP) + 2,
@@ -231,29 +231,29 @@ export function CalendarPage() {
     <div>
       {/* Page header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Calendar</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Calendar</h1>
         <div className="flex items-center gap-2">
           {/* Today button */}
           <button
             onClick={() => { setYear(today.year()); setMonth(today.month()) }}
-            className="px-3 py-1.5 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
             Today
           </button>
           {/* Month navigation */}
-          <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+          <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
             <button
               onClick={prev}
-              className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors"
+              className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <span className="px-4 text-sm font-semibold text-gray-800 min-w-[140px] text-center">
+            <span className="px-4 text-sm font-semibold text-gray-800 dark:text-gray-100 min-w-[140px] text-center">
               {monthLabel}
             </span>
             <button
               onClick={next}
-              className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors"
+              className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -264,7 +264,7 @@ export function CalendarPage() {
       {/* Status legend */}
       <div className="flex items-center gap-5 mb-4">
         {(['PLANNED', 'ONGOING', 'COMPLETED'] as const).map((s) => (
-          <span key={s} className="flex items-center gap-1.5 text-xs text-gray-500">
+          <span key={s} className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
             <span className={clsx('w-2.5 h-2.5 rounded-full', STATUS_DOT[s])} />
             {s.charAt(0) + s.slice(1).toLowerCase()}
           </span>
@@ -272,13 +272,13 @@ export function CalendarPage() {
       </div>
 
       {/* Calendar grid */}
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
         {/* Column headers */}
-        <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50">
+        <div className="grid grid-cols-7 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
           {DAY_LABELS.map((label) => (
             <div
               key={label}
-              className="py-2 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider border-r border-gray-100 last:border-0"
+              className="py-2 text-center text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-r border-gray-100 dark:border-gray-800 last:border-0"
             >
               {label}
             </div>
@@ -294,7 +294,7 @@ export function CalendarPage() {
       {/* Undated trips */}
       {undated.length > 0 && (
         <div className="mt-6">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+          <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">
             Trips without dates
           </p>
           <div className="flex flex-wrap gap-2">

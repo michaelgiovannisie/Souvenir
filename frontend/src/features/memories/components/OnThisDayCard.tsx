@@ -71,11 +71,11 @@ export function OnThisDayCard() {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate group-hover:text-amber-900 transition-colors">
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate group-hover:text-amber-900 transition-colors">
                     {moodEmoji && <span className="mr-1">{moodEmoji}</span>}
                     {memory.title}
                   </p>
-                  <p className="text-xs text-gray-400 truncate mt-0.5">
+                  <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">
                     {memory.tripTitle}
                     {memory.destinationName && ` · ${memory.destinationName}`}
                   </p>

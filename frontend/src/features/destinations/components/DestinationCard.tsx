@@ -10,7 +10,7 @@ const TYPE_META: Record<DestinationType, { emoji: string; label: string; color: 
   LANDMARK:     { emoji: '🗿', label: 'Landmark',      color: 'bg-amber-50 text-amber-700 border-amber-100' },
   BEACH:        { emoji: '🏖️', label: 'Beach',         color: 'bg-cyan-50 text-cyan-700 border-cyan-100' },
   MOUNTAIN:     { emoji: '⛰️', label: 'Mountain',      color: 'bg-slate-50 text-slate-700 border-slate-100' },
-  OTHER:        { emoji: '📍', label: 'Other',         color: 'bg-gray-50 text-gray-700 border-gray-100' },
+  OTHER:        { emoji: '📍', label: 'Other',         color: 'bg-gray-50 dark:bg-gray-900/50 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-800' },
 }
 
 interface DestinationCardProps {
@@ -35,7 +35,7 @@ export function DestinationCard({ destination: d, onEdit, onDelete }: Destinatio
       : null
 
   return (
-    <div className="group bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+    <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 hover:shadow-md hover:border-gray-300 dark:border-gray-600 transition-all duration-200">
       <div className="flex items-start gap-4">
         {/* Type badge */}
         <div className={clsx('flex-shrink-0 w-12 h-12 rounded-xl border flex items-center justify-center text-2xl', meta.color)}>
@@ -46,8 +46,8 @@ export function DestinationCard({ destination: d, onEdit, onDelete }: Destinatio
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="font-semibold text-gray-900 truncate">{d.name}</h3>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <h3 className="font-semibold text-gray-900 dark:text-white truncate">{d.name}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                 {[d.city, d.stateProvince, d.country].filter(Boolean).join(', ')}
               </p>
             </div>
@@ -56,14 +56,14 @@ export function DestinationCard({ destination: d, onEdit, onDelete }: Destinatio
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
               <button
                 onClick={() => onEdit(d)}
-                className="p-1.5 text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
+                className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
                 title="Edit"
               >
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => onDelete(d.id)}
-                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                 title="Delete"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -78,11 +78,11 @@ export function DestinationCard({ destination: d, onEdit, onDelete }: Destinatio
             </span>
 
             {dateRange && (
-              <span className="flex items-center gap-1 text-xs text-gray-500">
+              <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <Calendar className="w-3 h-3" />
                 {dateRange}
                 {duration && (
-                  <span className="text-gray-400">· {duration}d</span>
+                  <span className="text-gray-400 dark:text-gray-500">· {duration}d</span>
                 )}
               </span>
             )}
@@ -101,13 +101,13 @@ export function DestinationCard({ destination: d, onEdit, onDelete }: Destinatio
             )}
 
             {d.latitude && d.longitude && (
-              <span className="text-xs text-gray-400">📍 pinned</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">📍 pinned</span>
             )}
           </div>
 
           {/* Notes preview */}
           {d.notes && (
-            <p className="mt-2 text-xs text-gray-500 line-clamp-2 leading-relaxed">{d.notes}</p>
+            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">{d.notes}</p>
           )}
         </div>
       </div>

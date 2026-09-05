@@ -33,11 +33,11 @@ export function MemoriesTab({ tripId }: MemoriesTabProps) {
         {[...Array(3)].map((_, i) => (
           <div key={i} className="flex gap-4">
             <div className="flex flex-col items-center w-10">
-              <div className="w-3 h-3 rounded-full bg-gray-200 animate-pulse" />
-              <div className="flex-1 w-px bg-gray-100 mt-1" />
+              <div className="w-3 h-3 rounded-full bg-gray-200 dark:bg-gray-600 animate-pulse" />
+              <div className="flex-1 w-px bg-gray-100 dark:bg-gray-700 mt-1" />
             </div>
             <div className="flex-1 pb-6">
-              <div className="h-32 bg-gray-100 rounded-2xl animate-pulse" />
+              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-2xl animate-pulse" />
             </div>
           </div>
         ))}
@@ -49,7 +49,7 @@ export function MemoriesTab({ tripId }: MemoriesTabProps) {
     <>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <span className="text-base font-semibold text-gray-900">
+        <span className="text-base font-semibold text-gray-900 dark:text-white">
           {memories.length} {memories.length === 1 ? 'memory' : 'memories'}
         </span>
         <Button size="sm" onClick={openAdd}>
@@ -62,8 +62,8 @@ export function MemoriesTab({ tripId }: MemoriesTabProps) {
       {memories.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-3">📖</div>
-          <p className="text-sm font-medium text-gray-500 mb-1">No memories yet</p>
-          <p className="text-xs text-gray-400 mb-6">
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">No memories yet</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">
             Write about the moments that made this trip special
           </p>
           <Button onClick={openAdd}>
@@ -98,15 +98,15 @@ export function MemoriesTab({ tripId }: MemoriesTabProps) {
       {/* Delete confirmation */}
       {deleteConfirmId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="font-semibold text-gray-900 mb-2">Delete this memory?</h3>
-            <p className="text-sm text-gray-500 mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Delete this memory?</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
               This will permanently delete the journal entry. Photos attached to this memory will remain on the trip.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                className="flex-1 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Cancel
               </button>

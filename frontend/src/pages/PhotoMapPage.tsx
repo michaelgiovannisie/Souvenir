@@ -89,20 +89,20 @@ function PhotoPanel({
   return (
     <>
       {/* Panel */}
-      <div className="absolute bottom-0 inset-x-0 z-[1000] bg-white rounded-t-2xl shadow-2xl max-h-[55vh] flex flex-col">
+      <div className="absolute bottom-0 inset-x-0 z-[1000] bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl max-h-[55vh] flex flex-col">
         {/* Handle */}
         <div className="flex justify-center pt-2.5 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 bg-gray-200 rounded-full" />
+          <div className="w-10 h-1 bg-gray-200 dark:bg-gray-600 rounded-full" />
         </div>
 
         {/* Header */}
-        <div className="flex items-start justify-between px-5 pb-3 flex-shrink-0 border-b border-gray-100">
+        <div className="flex items-start justify-between px-5 pb-3 flex-shrink-0 border-b border-gray-100 dark:border-gray-800">
           <div className="min-w-0">
-            <h3 className="font-semibold text-gray-900 text-base leading-tight">{pin.name}</h3>
-            <div className="flex items-center gap-1.5 mt-0.5 text-sm text-gray-500">
+            <h3 className="font-semibold text-gray-900 dark:text-white text-base leading-tight">{pin.name}</h3>
+            <div className="flex items-center gap-1.5 mt-0.5 text-sm text-gray-500 dark:text-gray-400">
               <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
               <span>{pin.country}</span>
-              <span className="text-gray-300">·</span>
+              <span className="text-gray-300 dark:text-gray-600">·</span>
               <Link
                 to={`/trips/${pin.tripId}`}
                 className="text-brand-600 hover:underline flex items-center gap-1 truncate"
@@ -114,7 +114,7 @@ function PhotoPanel({
           </div>
           <button
             onClick={onClose}
-            className="ml-3 p-1.5 rounded-xl hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+            className="ml-3 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 transition-colors flex-shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
@@ -125,13 +125,13 @@ function PhotoPanel({
           {isLoading && (
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="aspect-square rounded-xl bg-gray-100 animate-pulse" />
+                <div key={i} className="aspect-square rounded-xl bg-gray-100 dark:bg-gray-700 animate-pulse" />
               ))}
             </div>
           )}
 
           {!isLoading && displayPhotos.length === 0 && (
-            <div className="text-center py-8 text-gray-400">
+            <div className="text-center py-8 text-gray-400 dark:text-gray-500">
               <Images className="w-8 h-8 mx-auto mb-2 opacity-40" />
               <p className="text-sm">No photos for this trip yet.</p>
             </div>
@@ -139,7 +139,7 @@ function PhotoPanel({
 
           {!isLoading && displayPhotos.length > 0 && (
             <>
-              <p className="text-xs text-gray-400 mb-3">
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
                 {displayPhotos.length} {displayPhotos.length === 1 ? 'photo' : 'photos'}
                 {destPhotos.length > 0 && destPhotos.length < photos.length
                   ? ` at this location`
@@ -176,7 +176,7 @@ function PhotoPanel({
           {lightboxIdx > 0 && (
             <button
               onClick={(e) => { e.stopPropagation(); prev() }}
-              className="absolute left-4 p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors"
+              className="absolute left-4 p-2 rounded-full bg-white dark:bg-gray-800/10 hover:bg-white dark:bg-gray-800/25 text-white transition-colors"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -210,7 +210,7 @@ function PhotoPanel({
           {lightboxIdx < displayPhotos.length - 1 && (
             <button
               onClick={(e) => { e.stopPropagation(); next() }}
-              className="absolute right-4 p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors"
+              className="absolute right-4 p-2 rounded-full bg-white dark:bg-gray-800/10 hover:bg-white dark:bg-gray-800/25 text-white transition-colors"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -219,7 +219,7 @@ function PhotoPanel({
           {/* Close */}
           <button
             onClick={() => setLightboxIdx(null)}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full bg-white dark:bg-gray-800/10 hover:bg-white dark:bg-gray-800/25 text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -315,8 +315,8 @@ export function PhotoMapPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Photo Map</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Photo Map</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
             {isLoading
               ? 'Loading locations…'
               : `${pins.length} ${pins.length === 1 ? 'location' : 'locations'} with photos`}
@@ -325,7 +325,7 @@ export function PhotoMapPage() {
         {selectedPin && (
           <button
             onClick={handleClose}
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+            className="text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 transition-colors flex items-center gap-1"
           >
             <X className="w-4 h-4" /> Close panel
           </button>
@@ -334,17 +334,17 @@ export function PhotoMapPage() {
 
       {/* Map + panel wrapper */}
       <div
-        className="relative rounded-2xl overflow-hidden border border-gray-200 shadow-sm"
+        className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm"
         style={{ height: 'calc(100vh - 10rem)' }}
       >
         {isLoading ? (
-          <div className="h-full bg-gray-100 animate-pulse flex items-center justify-center text-gray-400 text-sm">
+          <div className="h-full bg-gray-100 dark:bg-gray-700 animate-pulse flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm">
             Loading map…
           </div>
         ) : pins.length === 0 ? (
-          <div className="h-full bg-gray-50 flex flex-col items-center justify-center text-gray-400">
+          <div className="h-full bg-gray-50 dark:bg-gray-900/50 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
             <p className="text-3xl mb-3">📷</p>
-            <p className="font-medium text-gray-500">No locations yet</p>
+            <p className="font-medium text-gray-500 dark:text-gray-400">No locations yet</p>
             <p className="text-sm mt-1">Add destinations with coordinates to your trips.</p>
           </div>
         ) : (

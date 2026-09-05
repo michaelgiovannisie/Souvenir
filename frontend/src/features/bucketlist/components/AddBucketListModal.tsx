@@ -54,21 +54,21 @@ export function AddBucketListModal({ isOpen, onClose }: Props) {
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
+      <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
+        <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center">
               <MapPin className="w-5 h-5 text-brand-600" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Add to bucket list</h2>
-              <p className="text-xs text-gray-400">A place you dream of visiting</p>
+              <h2 className="text-base font-semibold text-gray-900 dark:text-white">Add to bucket list</h2>
+              <p className="text-xs text-gray-400 dark:text-gray-500">A place you dream of visiting</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,7 +78,7 @@ export function AddBucketListModal({ isOpen, onClose }: Props) {
         <form onSubmit={handleSubmit(onSubmit)} className="p-5 space-y-4">
           {/* Destination name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
               Destination <span className="text-red-400">*</span>
             </label>
             <input
@@ -86,9 +86,9 @@ export function AddBucketListModal({ isOpen, onClose }: Props) {
               type="text"
               placeholder="e.g. Kyoto, Santorini, Patagonia..."
               className={clsx(
-                'w-full px-3.5 py-2.5 border rounded-xl text-sm text-gray-900 placeholder-gray-400',
-                'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow',
-                errors.destinationName ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                'w-full px-3.5 py-2.5 border rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400',
+                'focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 focus:border-transparent dark:focus:border-transparent transition-shadow',
+                errors.destinationName ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-gray-700'
               )}
             />
             {errors.destinationName && (
@@ -98,7 +98,7 @@ export function AddBucketListModal({ isOpen, onClose }: Props) {
 
           {/* Country */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
               Country <span className="text-red-400">*</span>
             </label>
             <input
@@ -106,9 +106,9 @@ export function AddBucketListModal({ isOpen, onClose }: Props) {
               type="text"
               placeholder="e.g. Japan, Greece, Chile..."
               className={clsx(
-                'w-full px-3.5 py-2.5 border rounded-xl text-sm text-gray-900 placeholder-gray-400',
-                'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow',
-                errors.country ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                'w-full px-3.5 py-2.5 border rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400',
+                'focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 focus:border-transparent dark:focus:border-transparent transition-shadow',
+                errors.country ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-gray-700'
               )}
             />
             {errors.country && (
@@ -118,18 +118,18 @@ export function AddBucketListModal({ isOpen, onClose }: Props) {
 
           {/* Notes */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
               Notes
-              <span className="ml-1 text-xs text-gray-400 font-normal">optional</span>
+              <span className="ml-1 text-xs text-gray-400 dark:text-gray-500 font-normal">optional</span>
             </label>
             <textarea
               {...register('notes')}
               rows={3}
               placeholder="Why do you want to go here? What do you want to do?"
               className={clsx(
-                'w-full px-3.5 py-2.5 border rounded-xl text-sm text-gray-900 placeholder-gray-400 resize-none',
-                'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-shadow',
-                errors.notes ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                'w-full px-3.5 py-2.5 border rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 resize-none',
+                'focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 focus:border-transparent dark:focus:border-transparent transition-shadow',
+                errors.notes ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-gray-700'
               )}
             />
             {errors.notes && (
@@ -142,7 +142,7 @@ export function AddBucketListModal({ isOpen, onClose }: Props) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               Cancel
             </button>

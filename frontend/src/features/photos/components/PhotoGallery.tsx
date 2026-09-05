@@ -35,9 +35,9 @@ export function PhotoGallery({ tripId, photos, currentCoverUrl, onSetCover, isSe
 
   if (photos.length === 0) {
     return (
-      <div className="text-center py-20 text-gray-400">
+      <div className="text-center py-20 text-gray-400 dark:text-gray-500">
         <div className="text-5xl mb-3">📷</div>
-        <p className="text-sm font-medium text-gray-500">No photos yet</p>
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">No photos yet</p>
         <p className="text-xs mt-1">Upload some memories above</p>
       </div>
     )
@@ -59,7 +59,7 @@ export function PhotoGallery({ tripId, photos, currentCoverUrl, onSetCover, isSe
         {photos.map((photo, index) => {
           const isCover = !!currentCoverUrl && photo.cloudinaryUrl === currentCoverUrl
           return (
-            <div key={photo.id} className="break-inside-avoid group relative rounded-xl overflow-hidden bg-gray-100">
+            <div key={photo.id} className="break-inside-avoid group relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700">
               <img
                 src={photo.cloudinaryUrl}
                 alt={photo.caption ?? ''}
@@ -83,7 +83,7 @@ export function PhotoGallery({ tripId, photos, currentCoverUrl, onSetCover, isSe
               <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <button
                   onClick={(e) => { e.stopPropagation(); setLightboxIndex(index) }}
-                  className="p-1.5 bg-white/90 rounded-lg text-gray-700 hover:bg-white transition-colors shadow-sm"
+                  className="p-1.5 bg-white dark:bg-gray-800/90 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-white dark:bg-gray-800 transition-colors shadow-sm"
                   title="Zoom"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
@@ -92,7 +92,7 @@ export function PhotoGallery({ tripId, photos, currentCoverUrl, onSetCover, isSe
                   <button
                     onClick={(e) => { e.stopPropagation(); onSetCover(photo.id) }}
                     disabled={isSettingCover}
-                    className="p-1.5 bg-white/90 rounded-lg text-amber-500 hover:bg-white hover:text-amber-600 transition-colors shadow-sm disabled:opacity-50"
+                    className="p-1.5 bg-white dark:bg-gray-800/90 rounded-lg text-amber-500 hover:bg-white dark:bg-gray-800 hover:text-amber-600 transition-colors shadow-sm disabled:opacity-50"
                     title="Set as cover photo"
                   >
                     <ImagePlus className="w-3.5 h-3.5" />
@@ -100,7 +100,7 @@ export function PhotoGallery({ tripId, photos, currentCoverUrl, onSetCover, isSe
                 )}
                 <button
                   onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(photo.id) }}
-                  className="p-1.5 bg-white/90 rounded-lg text-red-500 hover:bg-white transition-colors shadow-sm"
+                  className="p-1.5 bg-white dark:bg-gray-800/90 rounded-lg text-red-500 hover:bg-white dark:bg-gray-800 transition-colors shadow-sm"
                   title="Delete"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -121,15 +121,15 @@ export function PhotoGallery({ tripId, photos, currentCoverUrl, onSetCover, isSe
       {/* Delete confirmation */}
       {deleteConfirmId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="font-semibold text-gray-900 mb-2">Delete photo?</h3>
-            <p className="text-sm text-gray-500 mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Delete photo?</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
               This will permanently remove the photo from Cloudinary. This cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                className="flex-1 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Cancel
               </button>

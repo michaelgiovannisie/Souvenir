@@ -24,15 +24,15 @@ export function LoginForm() {
   const apiError = (error as any)?.response?.data?.error?.message
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">🌍 Souvenir</h1>
-          <p className="mt-2 text-gray-500">Welcome back, traveler</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">🌍 Souvenir</h1>
+          <p className="mt-2 text-gray-500 dark:text-gray-400">Welcome back, traveler</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Sign in to your account</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Sign in to your account</h2>
 
           {apiError && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
@@ -60,7 +60,7 @@ export function LoginForm() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-500">
+          <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
             Don't have an account?{' '}
             <Link to="/register" className="text-brand-600 hover:text-brand-700 font-medium">
               Create one

@@ -81,12 +81,12 @@ function AddItemForm({ tripId }: { tripId: string }) {
         onChange={(e) => setName(e.target.value)}
         onKeyDown={onKey}
         placeholder="Add an item…"
-        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white placeholder:text-gray-400"
+        className="flex-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 focus:border-transparent dark:focus:border-transparent bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:text-gray-500"
       />
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value as PackingCategory | '')}
-        className="px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white text-gray-700"
+        className="px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
       >
         {CATEGORY_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -126,7 +126,7 @@ function PackingItemRow({
     <div
       className={clsx(
         'group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors',
-        item.packed ? 'bg-gray-50' : 'hover:bg-gray-50'
+        item.packed ? 'bg-gray-50 dark:bg-gray-900/50' : 'hover:bg-gray-50 dark:hover:bg-gray-700'
       )}
     >
       {/* Checkbox */}
@@ -137,7 +137,7 @@ function PackingItemRow({
           'flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors',
           item.packed
             ? 'bg-brand-500 border-brand-500'
-            : 'border-gray-300 hover:border-brand-400'
+            : 'border-gray-300 dark:border-gray-600 hover:border-brand-400'
         )}
       >
         {isUpdating ? (
@@ -153,7 +153,7 @@ function PackingItemRow({
       <span
         className={clsx(
           'flex-1 text-sm transition-colors',
-          item.packed ? 'line-through text-gray-400' : 'text-gray-800'
+          item.packed ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-800 dark:text-gray-100'
         )}
       >
         {item.name}
@@ -161,7 +161,7 @@ function PackingItemRow({
 
       {/* Quantity badge (only if > 1) */}
       {item.quantity > 1 && (
-        <span className="text-xs text-gray-400 font-medium bg-gray-100 px-2 py-0.5 rounded-full">
+        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
           ×{item.quantity}
         </span>
       )}
@@ -170,7 +170,7 @@ function PackingItemRow({
       <button
         onClick={() => remove(item.id)}
         disabled={isDeleting}
-        className="opacity-0 group-hover:opacity-100 p-1 text-gray-300 hover:text-red-400 transition-all flex-shrink-0"
+        className="opacity-0 group-hover:opacity-100 p-1 text-gray-300 dark:text-gray-600 hover:text-red-400 transition-all flex-shrink-0"
         title="Remove item"
       >
         {isDeleting ? (
@@ -202,10 +202,10 @@ export function PackingListTab({ tripId }: { tripId: string }) {
   if (isLoading) {
     return (
       <div className="space-y-3 animate-pulse">
-        <div className="h-4 bg-gray-200 rounded w-1/3" />
-        <div className="h-10 bg-gray-200 rounded-xl" />
+        <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-1/3" />
+        <div className="h-10 bg-gray-200 dark:bg-gray-600 rounded-xl" />
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-10 bg-gray-100 rounded-xl" />
+          <div key={i} className="h-10 bg-gray-100 dark:bg-gray-700 rounded-xl" />
         ))}
       </div>
     )
@@ -217,7 +217,7 @@ export function PackingListTab({ tripId }: { tripId: string }) {
       {total > 0 && (
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500">
+            <span className="text-gray-500 dark:text-gray-400">
               {packed} / {total} packed
             </span>
             {allDone ? (
@@ -226,7 +226,7 @@ export function PackingListTab({ tripId }: { tripId: string }) {
               <span className="font-semibold text-brand-700">{pct}%</span>
             )}
           </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
               className={clsx(
                 'h-full rounded-full transition-all duration-500',
@@ -246,10 +246,10 @@ export function PackingListTab({ tripId }: { tripId: string }) {
       {/* Empty state */}
       {total === 0 && (
         <div className="text-center py-16">
-          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-gray-100 flex items-center justify-center">
-            <Package className="w-6 h-6 text-gray-400" />
+          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+            <Package className="w-6 h-6 text-gray-400 dark:text-gray-500" />
           </div>
-          <p className="text-gray-500 text-sm">No items yet — start adding things to pack</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">No items yet — start adding things to pack</p>
         </div>
       )}
 
@@ -266,10 +266,10 @@ export function PackingListTab({ tripId }: { tripId: string }) {
           <div key={key}>
             {/* Category header */}
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm font-semibold text-gray-700">
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {meta.emoji} {meta.label}
               </span>
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-gray-400 dark:text-gray-500">
                 {groupItems.filter((i) => i.packed).length}/{groupItems.length}
               </span>
             </div>
