@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy, Wallet } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy, Wallet, Play } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto, useDuplicateTrip } from '@/features/trips/hooks/useTrips'
@@ -14,6 +14,7 @@ import { usePacking } from '@/features/packing/hooks/usePacking'
 import { NotesTab } from '@/features/trips/components/NotesTab'
 import { ExpensesTab } from '@/features/expenses/components/ExpensesTab'
 import { useExpenses } from '@/features/expenses/hooks/useExpenses'
+import { SlideshowModal } from '@/features/photos/components/SlideshowModal'
 
 type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes' | 'expenses'
 
@@ -34,6 +35,7 @@ export function TripDetail() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<Tab>('photos')
   const [showUploader, setShowUploader] = useState(false)
+  const [slideshowOpen, setSlideshowOpen] = useState(false)
 
   const { data: trip, isLoading: tripLoading } = useTrip(id!)
   const { data: photos = [], isLoading: photosLoading } = useTripPhotos(id!)
@@ -211,18 +213,29 @@ export function TripDetail() {
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               {photos.length} {photos.length === 1 ? 'photo' : 'photos'}
             </h2>
-            <button
-              onClick={() => setShowUploader((v) => !v)}
-              className={clsx(
-                'px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2',
-                showUploader
-                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  : 'bg-brand-600 text-white hover:bg-brand-700'
+            <div className="flex items-center gap-2">
+              {photos.length > 0 && (
+                <button
+                  onClick={() => setSlideshowOpen(true)}
+                  className="px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                >
+                  <Play className="w-4 h-4" />
+                  Slideshow
+                </button>
               )}
-            >
-              <Camera className="w-4 h-4" />
-              {showUploader ? 'Hide uploader' : 'Upload photos'}
-            </button>
+              <button
+                onClick={() => setShowUploader((v) => !v)}
+                className={clsx(
+                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2',
+                  showUploader
+                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    : 'bg-brand-600 text-white hover:bg-brand-700'
+                )}
+              >
+                <Camera className="w-4 h-4" />
+                {showUploader ? 'Hide uploader' : 'Upload photos'}
+              </button>
+            </div>
           </div>
 
           {/* Uploader */}
@@ -273,6 +286,14 @@ export function TripDetail() {
 
       {activeTab === 'expenses' && (
         <ExpensesTab tripId={id!} />
+      )}
+
+      {slideshowOpen && photos.length > 0 && (
+        <SlideshowModal
+          photos={photos}
+          tripTitle={trip.title}
+          onClose={() => setSlideshowOpen(false)}
+        />
       )}
     </div>
   )
