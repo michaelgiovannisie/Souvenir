@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Loader2, Sparkles } from 'lucide-react'
 import { useTrips } from '@/features/trips/hooks/useTrips'
@@ -10,7 +10,7 @@ import { useAuthStore } from '@/store/authStore'
 import type { TripStatus } from '@/features/trips/api/tripsApi'
 import { clsx } from 'clsx'
 
-const filters: { label: string; value: TripStatus | undefined }[] = [
+const STATUS_FILTERS: { label: string; value: TripStatus | undefined }[] = [
   { label: 'All', value: undefined },
   { label: 'Planned', value: 'PLANNED' },
   { label: 'Ongoing', value: 'ONGOING' },
@@ -21,8 +21,23 @@ export function Dashboard() {
   const { user } = useAuthStore()
   const navigate = useNavigate()
   const [statusFilter, setStatusFilter] = useState<TripStatus | undefined>(undefined)
-  const { data, isLoading, isError } = useTrips({ status: statusFilter })
+  const [tagFilter, setTagFilter] = useState<string | undefined>(undefined)
+  // Fetch all trips (large page) so tag filter + tag chip bar work across the full collection
+  const { data, isLoading, isError } = useTrips({ status: statusFilter, size: 200 })
   const { mutate: generate, isPending: isGenerating } = useGenerateSampleTrip()
+
+  // Collect all unique tags from loaded trips for the filter bar
+  const allTags = useMemo(() => {
+    const set = new Set<string>()
+    data?.content.forEach(t => t.tags?.forEach(tag => set.add(tag)))
+    return Array.from(set).sort()
+  }, [data])
+
+  // Apply tag filter client-side
+  const trips = useMemo(() => {
+    if (!tagFilter) return data?.content ?? []
+    return (data?.content ?? []).filter(t => t.tags?.includes(tagFilter))
+  }, [data, tagFilter])
 
   function handleGenerate() {
     generate(undefined, {
@@ -74,8 +89,8 @@ export function Dashboard() {
       <OnThisDayCard />
 
       {/* Status filter tabs */}
-      <div className="flex gap-2 mb-6">
-        {filters.map(({ label, value }) => (
+      <div className="flex gap-2 mb-3">
+        {STATUS_FILTERS.map(({ label, value }) => (
           <button
             key={label}
             onClick={() => setStatusFilter(value)}
@@ -91,6 +106,26 @@ export function Dashboard() {
         ))}
       </div>
 
+      {/* Tag filter row — only shown when trips have tags */}
+      {allTags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-5">
+          {allTags.map(tag => (
+            <button
+              key={tag}
+              onClick={() => setTagFilter(tagFilter === tag ? undefined : tag)}
+              className={clsx(
+                'px-3 py-1 rounded-full text-xs font-medium transition-colors',
+                tagFilter === tag
+                  ? 'bg-brand-600 text-white'
+                  : 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50'
+              )}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Trip grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -100,7 +135,7 @@ export function Dashboard() {
         </div>
       ) : isError ? (
         <div className="text-center py-16 text-gray-500 dark:text-gray-400">Failed to load trips. Please try again.</div>
-      ) : data?.content.length === 0 ? (
+      ) : trips.length === 0 && !isGenerating ? (
         <div className="text-center py-24">
           <div className="text-6xl mb-4">✈️</div>
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No trips yet</h3>
@@ -139,7 +174,7 @@ export function Dashboard() {
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data?.content.map((trip) => (
+            {trips.map((trip) => (
               <TripCard key={trip.id} trip={trip} />
             ))}
           </div>

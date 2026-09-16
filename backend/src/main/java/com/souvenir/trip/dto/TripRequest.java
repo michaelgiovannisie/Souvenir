@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class TripRequest {
@@ -20,4 +22,7 @@ public class TripRequest {
     private LocalDate startDate;
     private LocalDate endDate;
     private TripStatus status;
+
+    /** Optional list of tags, e.g. ["beach", "solo", "backpacking"]. */
+    private List<@Size(max = 50) String> tags = new ArrayList<>();
 }

@@ -43,6 +43,10 @@ public class Trip extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    /** Comma-separated tags, e.g. "beach,solo,backpacking". Null/empty = no tags. */
+    @Column(columnDefinition = "TEXT")
+    private String tags;
+
     @Column(name = "cover_photo_public_id")
     private String coverPhotoPublicId;
 

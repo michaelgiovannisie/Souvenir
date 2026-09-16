@@ -15,6 +15,8 @@ import { NotesTab } from '@/features/trips/components/NotesTab'
 import { ExpensesTab } from '@/features/expenses/components/ExpensesTab'
 import { useExpenses } from '@/features/expenses/hooks/useExpenses'
 import { SlideshowModal } from '@/features/photos/components/SlideshowModal'
+import { TagsEditor } from '@/features/trips/components/TagsEditor'
+import { useUpdateTrip } from '@/features/trips/hooks/useTrips'
 
 type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes' | 'expenses'
 
@@ -44,6 +46,7 @@ export function TripDetail() {
   const { data: packingItems = [] } = usePacking(id!)
   const { data: expenses = [] } = useExpenses(id!)
   const { mutate: duplicate, isPending: isDuplicating } = useDuplicateTrip()
+  const { mutate: updateTrip } = useUpdateTrip(id!)
 
   if (tripLoading) {
     return (
@@ -173,6 +176,21 @@ export function TripDetail() {
       {trip.description && (
         <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{trip.description}</p>
       )}
+
+      {/* Tags */}
+      <TagsEditor
+        tags={trip.tags ?? []}
+        onChange={(tags) =>
+          updateTrip({
+            title: trip.title,
+            description: trip.description ?? undefined,
+            startDate: trip.startDate ?? undefined,
+            endDate: trip.endDate ?? undefined,
+            status: trip.status,
+            tags,
+          })
+        }
+      />
 
       {/* Tabs */}
       <div className="border-b border-gray-200 dark:border-gray-700">

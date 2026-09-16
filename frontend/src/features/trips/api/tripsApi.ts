@@ -11,6 +11,7 @@ export interface Trip {
   coverPhotoUrl: string | null
   notes: string | null
   status: TripStatus
+  tags: string[]
   destinationCount: number
   memoryCount: number
   photoCount: number
@@ -24,6 +25,7 @@ export interface TripRequest {
   startDate?: string
   endDate?: string
   status?: TripStatus
+  tags?: string[]
 }
 
 export interface PageResponse<T> {

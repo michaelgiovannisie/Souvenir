@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -19,6 +20,7 @@ public class TripResponse {
     private final String coverPhotoUrl;
     private final String notes;
     private final TripStatus status;
+    private final List<String> tags;
     private final int destinationCount;
     private final int memoryCount;
     private final int photoCount;

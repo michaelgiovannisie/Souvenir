@@ -21,8 +21,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +66,7 @@ public class TripService {
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .status(request.getStatus() != null ? request.getStatus() : TripStatus.PLANNED)
+                .tags(encodeTags(request.getTags()))
                 .build();
 
         return toResponse(tripRepository.save(trip));
@@ -78,6 +82,7 @@ public class TripService {
         trip.setStartDate(request.getStartDate());
         trip.setEndDate(request.getEndDate());
         if (request.getStatus() != null) trip.setStatus(request.getStatus());
+        trip.setTags(encodeTags(request.getTags()));
 
         return toResponse(tripRepository.save(trip));
     }
@@ -128,6 +133,7 @@ public class TripService {
                 .startDate(original.getStartDate())
                 .endDate(original.getEndDate())
                 .status(TripStatus.PLANNED)
+                .tags(original.getTags())
                 .build();
 
         Trip saved = tripRepository.save(copy);
@@ -189,11 +195,32 @@ public class TripService {
                 .coverPhotoUrl(trip.getCoverPhotoUrl())
                 .notes(trip.getNotes())
                 .status(trip.getStatus())
+                .tags(decodeTags(trip.getTags()))
                 .destinationCount(trip.getDestinations().size())
                 .memoryCount(trip.getMemories().size())
                 .photoCount(trip.getPhotos().size())
                 .createdAt(trip.getCreatedAt())
                 .updatedAt(trip.getUpdatedAt())
                 .build();
+    }
+
+    /** Converts a List of tags to the stored comma-separated string (lowercased, trimmed, deduped). */
+    private String encodeTags(List<String> tags) {
+        if (tags == null || tags.isEmpty()) return null;
+        return tags.stream()
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(t -> !t.isBlank())
+                .distinct()
+                .collect(Collectors.joining(","));
+    }
+
+    /** Converts the stored comma-separated string back to a List of tags. */
+    private List<String> decodeTags(String raw) {
+        if (raw == null || raw.isBlank()) return Collections.emptyList();
+        return Arrays.stream(raw.split(","))
+                .map(String::trim)
+                .filter(t -> !t.isBlank())
+                .collect(Collectors.toList());
     }
 }
