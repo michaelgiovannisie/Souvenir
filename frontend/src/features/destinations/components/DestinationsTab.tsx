@@ -135,6 +135,7 @@ export function DestinationsTab({ tripId }: DestinationsTabProps) {
             <DestinationCard
               key={d.id}
               destination={d}
+              tripId={tripId}
               onEdit={openEdit}
               onDelete={(id) => setDeleteConfirmId(id)}
             />

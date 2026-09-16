@@ -1,7 +1,9 @@
-import { Pencil, Trash2, Calendar, Star } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Pencil, Trash2, Calendar, Star, Check } from 'lucide-react'
 import dayjs from 'dayjs'
 import { clsx } from 'clsx'
 import { Destination, DestinationType } from '../api/destinationsApi'
+import { useUpdateDestination } from '../hooks/useDestinations'
 
 const TYPE_META: Record<DestinationType, { emoji: string; label: string; color: string }> = {
   CITY:         { emoji: '🏙️', label: 'City',          color: 'bg-blue-50 text-blue-700 border-blue-100' },
@@ -15,13 +17,79 @@ const TYPE_META: Record<DestinationType, { emoji: string; label: string; color: 
 
 interface DestinationCardProps {
   destination: Destination
+  tripId: string
   onEdit: (d: Destination) => void
   onDelete: (id: string) => void
 }
 
-export function DestinationCard({ destination: d, onEdit, onDelete }: DestinationCardProps) {
+export function DestinationCard({ destination: d, tripId, onEdit, onDelete }: DestinationCardProps) {
   const meta = TYPE_META[d.type]
+  const { mutate: updateDestination } = useUpdateDestination(tripId)
 
+  // ── Inline notes state ────────────────────────────────────────────────────────
+  const [editingNotes, setEditingNotes] = useState(false)
+  const [draftNotes, setDraftNotes] = useState(d.notes ?? '')
+  const [saved, setSaved] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Keep draft in sync if destination prop changes (e.g. after external edit)
+  useEffect(() => {
+    if (!editingNotes) setDraftNotes(d.notes ?? '')
+  }, [d.notes, editingNotes])
+
+  // Auto-resize textarea height to fit content
+  useEffect(() => {
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${el.scrollHeight}px`
+  }, [draftNotes, editingNotes])
+
+  function openNotes() {
+    setDraftNotes(d.notes ?? '')
+    setEditingNotes(true)
+    setTimeout(() => {
+      textareaRef.current?.focus()
+      // Place cursor at end
+      const len = textareaRef.current?.value.length ?? 0
+      textareaRef.current?.setSelectionRange(len, len)
+    }, 30)
+  }
+
+  function saveNotes() {
+    setEditingNotes(false)
+    const trimmed = draftNotes.trim()
+    if (trimmed === (d.notes ?? '').trim()) return // no change
+    updateDestination({
+      id: d.id,
+      payload: {
+        name: d.name,
+        country: d.country,
+        stateProvince: d.stateProvince ?? undefined,
+        city: d.city ?? undefined,
+        latitude: d.latitude,
+        longitude: d.longitude,
+        type: d.type,
+        arrivalDate: d.arrivalDate,
+        departureDate: d.departureDate,
+        notes: trimmed || undefined,
+        rating: d.rating,
+      },
+    })
+    setSaved(true)
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
+    savedTimerRef.current = setTimeout(() => setSaved(false), 2000)
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Escape') {
+      setDraftNotes(d.notes ?? '')
+      setEditingNotes(false)
+    }
+  }
+
+  // ── Date / duration helpers ───────────────────────────────────────────────────
   const dateRange =
     d.arrivalDate && d.departureDate
       ? `${dayjs(d.arrivalDate).format('MMM D')} — ${dayjs(d.departureDate).format('MMM D, YYYY')}`
@@ -103,12 +171,54 @@ export function DestinationCard({ destination: d, onEdit, onDelete }: Destinatio
             {d.latitude && d.longitude && (
               <span className="text-xs text-gray-400 dark:text-gray-500">📍 pinned</span>
             )}
+
+            {/* Saved flash */}
+            {saved && (
+              <span className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                <Check className="w-3 h-3" />
+                Saved
+              </span>
+            )}
           </div>
 
-          {/* Notes preview */}
-          {d.notes && (
-            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">{d.notes}</p>
-          )}
+          {/* ── Notes section ─────────────────────────────────────────────────── */}
+          <div className="mt-2.5">
+            {editingNotes ? (
+              <textarea
+                ref={textareaRef}
+                value={draftNotes}
+                onChange={e => setDraftNotes(e.target.value)}
+                onBlur={saveNotes}
+                onKeyDown={handleKeyDown}
+                placeholder="Notes about this place…"
+                rows={2}
+                className={clsx(
+                  'w-full resize-none text-xs leading-relaxed rounded-xl px-3 py-2',
+                  'border border-brand-400 ring-2 ring-brand-500/20',
+                  'bg-white dark:bg-gray-900/50 text-gray-700 dark:text-gray-300',
+                  'placeholder-gray-400 dark:placeholder-gray-500 outline-none',
+                  'transition-all overflow-hidden'
+                )}
+              />
+            ) : d.notes ? (
+              /* Notes exist — click the text to edit */
+              <p
+                onClick={openNotes}
+                className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed cursor-text hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                title="Click to edit notes"
+              >
+                {d.notes}
+              </p>
+            ) : (
+              /* No notes — show subtle prompt on hover */
+              <button
+                onClick={openNotes}
+                className="text-xs text-gray-300 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-400 transition-colors opacity-0 group-hover:opacity-100 italic"
+              >
+                + Add notes…
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
