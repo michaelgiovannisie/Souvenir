@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy, Wallet, Play } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy, Wallet, Play, LayoutList } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto, useDuplicateTrip } from '@/features/trips/hooks/useTrips'
@@ -14,11 +14,12 @@ import { usePacking } from '@/features/packing/hooks/usePacking'
 import { NotesTab } from '@/features/trips/components/NotesTab'
 import { ExpensesTab } from '@/features/expenses/components/ExpensesTab'
 import { useExpenses } from '@/features/expenses/hooks/useExpenses'
+import { TimelineTab } from '@/features/trips/components/TimelineTab'
 import { SlideshowModal } from '@/features/photos/components/SlideshowModal'
 import { TagsEditor } from '@/features/trips/components/TagsEditor'
 import { useUpdateTrip } from '@/features/trips/hooks/useTrips'
 
-type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes' | 'expenses'
+type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes' | 'expenses' | 'timeline'
 
 const statusColors = {
   PLANNED: 'bg-yellow-100 text-yellow-700',
@@ -81,6 +82,7 @@ export function TripDetail() {
     { key: 'packing',      label: 'Packing',  icon: Package,   count: packingItems.length || undefined },
     { key: 'notes',        label: 'Notes',    icon: StickyNote, count: trip.notes ? 1 : undefined },
     { key: 'expenses',     label: 'Expenses', icon: Wallet,     count: expenses.length || undefined },
+    { key: 'timeline',     label: 'Timeline', icon: LayoutList },
   ]
 
   return (
@@ -304,6 +306,10 @@ export function TripDetail() {
 
       {activeTab === 'expenses' && (
         <ExpensesTab tripId={id!} />
+      )}
+
+      {activeTab === 'timeline' && (
+        <TimelineTab tripId={id!} tripStartDate={trip.startDate} />
       )}
 
       {slideshowOpen && photos.length > 0 && (
