@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Trash2, Plus, ChevronDown, ChevronUp, Target, Check } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
