@@ -3,6 +3,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
 import { LoginForm } from '@/features/auth/components/LoginForm'
 import { RegisterForm } from '@/features/auth/components/RegisterForm'
+import { AuthInitializer } from '@/features/auth/components/AuthInitializer'
 import { Dashboard } from '@/pages/Dashboard'
 import { MapPage } from '@/pages/MapPage'
 import { TripDetail } from '@/pages/TripDetail'
@@ -17,6 +18,7 @@ import { PhotoMapPage } from '@/pages/PhotoMapPage'
 
 export default function App() {
   return (
+    <AuthInitializer>
     <Routes>
       {/* Public routes */}
       <Route path="/login" element={<LoginForm />} />
@@ -44,5 +46,6 @@ export default function App() {
       {/* Catch-all */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
+    </AuthInitializer>
   )
 }
