@@ -19,7 +19,6 @@ export function useLogin() {
 }
 
 export function useRegister() {
-  const { setAuth } = useAuthStore()
   const navigate = useNavigate()
 
   return useMutation({
@@ -29,9 +28,8 @@ export function useRegister() {
       displayName: string
       password: string
     }) => authApi.register(payload),
-    onSuccess: (data) => {
-      setAuth(data.user, data.accessToken, data.refreshToken)
-      navigate('/dashboard')
+    onSuccess: () => {
+      navigate('/login', { state: { registered: true } })
     },
   })
 }

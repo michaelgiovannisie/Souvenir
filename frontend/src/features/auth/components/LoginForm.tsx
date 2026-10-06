@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { loginSchema, LoginFormValues } from '../schemas/authSchemas'
 import { useLogin } from '../hooks/useAuth'
 import { Button } from '@/components/ui/Button'
@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/Input'
 
 export function LoginForm() {
   const { mutate: login, isPending, error } = useLogin()
+  const location = useLocation()
+  const justRegistered = (location.state as any)?.registered === true
 
   const {
     register,
@@ -33,6 +35,12 @@ export function LoginForm() {
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Sign in to your account</h2>
+
+          {justRegistered && (
+            <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-sm text-green-700 dark:text-green-400">
+              Account created! Sign in to get started.
+            </div>
+          )}
 
           {apiError && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
