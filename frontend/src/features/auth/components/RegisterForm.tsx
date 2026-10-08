@@ -22,7 +22,11 @@ export function RegisterForm() {
     register_(payload)
   }
 
-  const apiError = (error as any)?.response?.data?.error?.message
+  const apiError =
+    (error as any)?.response?.data?.error?.message ||
+    (error as any)?.response?.data?.message ||
+    ((error as any)?.response ? `Server error (${(error as any).response.status})` : null) ||
+    ((error as any)?.message ? `Network error: ${(error as any).message}` : null)
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 px-4">
