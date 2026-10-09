@@ -29,5 +29,4 @@ app:
     api-secret: ${CLOUDINARY_API_SECRET:your-api-secret}
 
   cors:
-    allowed-origins:
-      - http://localhost:5173
+    allowed-origins: "http://localhost:5173"

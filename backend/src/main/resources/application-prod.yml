@@ -31,5 +31,4 @@ app:
     api-secret: ${CLOUDINARY_API_SECRET}
 
   cors:
-    allowed-origins:
-      - ${FRONTEND_URL}
+    allowed-origins: "${FRONTEND_URL:http://localhost:5173}"
