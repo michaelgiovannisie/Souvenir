@@ -4,6 +4,7 @@ import { Plus, Loader2, Sparkles } from 'lucide-react'
 import { useTrips } from '@/features/trips/hooks/useTrips'
 import { useGenerateSampleTrip } from '@/features/trips/hooks/useGenerateSampleTrip'
 import { TripCard } from '@/features/trips/components/TripCard'
+import { CreateTripModal } from '@/features/trips/components/CreateTripModal'
 import { OnThisDayCard } from '@/features/memories/components/OnThisDayCard'
 import { Button } from '@/components/ui/Button'
 import { useAuthStore } from '@/store/authStore'
@@ -22,6 +23,7 @@ export function Dashboard() {
   const navigate = useNavigate()
   const [statusFilter, setStatusFilter] = useState<TripStatus | undefined>(undefined)
   const [tagFilter, setTagFilter] = useState<string | undefined>(undefined)
+  const [showCreateModal, setShowCreateModal] = useState(false)
   // Fetch all trips (large page) so tag filter + tag chip bar work across the full collection
   const { data, isLoading, isError } = useTrips({ status: statusFilter, size: 200 })
   const { mutate: generate, isPending: isGenerating } = useGenerateSampleTrip()
@@ -46,6 +48,7 @@ export function Dashboard() {
   }
 
   return (
+    <>
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -78,7 +81,7 @@ export function Dashboard() {
             </span>
           </button>
 
-          <Button>
+          <Button onClick={() => setShowCreateModal(true)}>
             <Plus className="w-4 h-4 mr-1.5" />
             New Trip
           </Button>
@@ -141,7 +144,7 @@ export function Dashboard() {
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No trips yet</h3>
           <p className="text-gray-500 dark:text-gray-400 mb-6">Start documenting your adventures</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button>
+            <Button onClick={() => setShowCreateModal(true)}>
               <Plus className="w-4 h-4 mr-1.5" />
               Create your first trip
             </Button>
@@ -181,5 +184,10 @@ export function Dashboard() {
         </>
       )}
     </div>
+
+    {showCreateModal && (
+      <CreateTripModal onClose={() => setShowCreateModal(false)} />
+    )}
+    </>
   )
 }
