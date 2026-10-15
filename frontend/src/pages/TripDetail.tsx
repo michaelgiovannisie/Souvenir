@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy, Wallet, Play, LayoutList, Backpack } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Camera, BookOpen, Clock, ImageOff, Package, Download, StickyNote, Copy, Wallet, Play, LayoutList, Backpack, Sparkles } from 'lucide-react'
 import { clsx } from 'clsx'
 import dayjs from 'dayjs'
 import { useTrip, useSetCoverPhoto, useRemoveCoverPhoto, useDuplicateTrip } from '@/features/trips/hooks/useTrips'
@@ -16,11 +16,13 @@ import { ExpensesTab } from '@/features/expenses/components/ExpensesTab'
 import { useExpenses } from '@/features/expenses/hooks/useExpenses'
 import { TimelineTab } from '@/features/trips/components/TimelineTab'
 import { MementosTab } from '@/features/mementos/components/MementosTab'
+import { AiTab } from '@/features/ai/components/AiTab'
+import { useTripDestinations } from '@/features/destinations/hooks/useDestinations'
 import { SlideshowModal } from '@/features/photos/components/SlideshowModal'
 import { TagsEditor } from '@/features/trips/components/TagsEditor'
 import { useUpdateTrip } from '@/features/trips/hooks/useTrips'
 
-type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes' | 'expenses' | 'timeline' | 'mementos'
+type Tab = 'photos' | 'destinations' | 'memories' | 'packing' | 'notes' | 'expenses' | 'timeline' | 'mementos' | 'ai'
 
 const statusColors = {
   PLANNED: 'bg-yellow-100 text-yellow-700',
@@ -49,6 +51,7 @@ export function TripDetail() {
   const { data: expenses = [] } = useExpenses(id!)
   const { mutate: duplicate, isPending: isDuplicating } = useDuplicateTrip()
   const { mutate: updateTrip } = useUpdateTrip(id!)
+  const { data: destinations = [] } = useTripDestinations(id!)
 
   if (tripLoading) {
     return (
@@ -85,6 +88,7 @@ export function TripDetail() {
     { key: 'expenses',     label: 'Expenses', icon: Wallet,     count: expenses.length || undefined },
     { key: 'timeline',     label: 'Timeline', icon: LayoutList },
     { key: 'mementos',    label: 'Mementos', icon: Backpack },
+    { key: 'ai',          label: 'AI ✨',    icon: Sparkles },
   ]
 
   return (
@@ -316,6 +320,16 @@ export function TripDetail() {
 
       {activeTab === 'mementos' && (
         <MementosTab tripId={id!} />
+      )}
+
+      {activeTab === 'ai' && (
+        <AiTab
+          tripId={id!}
+          tripTitle={trip.title}
+          destinations={destinations.map((d) => d.name)}
+          startDate={trip.startDate}
+          endDate={trip.endDate}
+        />
       )}
 
       {slideshowOpen && photos.length > 0 && (

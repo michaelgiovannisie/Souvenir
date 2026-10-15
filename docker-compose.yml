@@ -37,6 +37,19 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  ai-service:
+    build:
+      context: ./nestjs-ai
+      dockerfile: Dockerfile
+    container_name: souvenir-ai
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-change-in-production-at-least-256-bits-long}
+    restart: unless-stopped
+
   frontend:
     build:
       context: ./frontend
@@ -46,6 +59,7 @@ services:
       - "5173:80"
     depends_on:
       - backend
+      - ai-service
     restart: unless-stopped
 
 volumes:
