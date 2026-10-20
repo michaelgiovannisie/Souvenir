@@ -80,6 +80,7 @@ export function TripDetail() {
       : null
 
   const tabs: { key: Tab; label: string; icon: typeof Camera; count?: number }[] = [
+    { key: 'ai',          label: 'AI ✨',    icon: Sparkles },
     { key: 'photos',       label: 'Photos',   icon: Camera,   count: trip.photoCount },
     { key: 'destinations', label: 'Places',   icon: MapPin,   count: trip.destinationCount },
     { key: 'memories',     label: 'Memories', icon: BookOpen, count: trip.memoryCount },
@@ -88,7 +89,6 @@ export function TripDetail() {
     { key: 'expenses',     label: 'Expenses', icon: Wallet,     count: expenses.length || undefined },
     { key: 'timeline',     label: 'Timeline', icon: LayoutList },
     { key: 'mementos',    label: 'Mementos', icon: Backpack },
-    { key: 'ai',          label: 'AI ✨',    icon: Sparkles },
   ]
 
   return (
@@ -200,22 +200,23 @@ export function TripDetail() {
         }
       />
 
-      {/* Tabs */}
-      <div className="border-b border-gray-200 dark:border-gray-700">
-        <div className="flex gap-1 overflow-x-auto scrollbar-none">
+      {/* Tabs + content */}
+      <div className="flex gap-6 items-start">
+        {/* Left sidebar nav */}
+        <nav className="flex-shrink-0 w-44 flex flex-col gap-1">
           {tabs.map(({ key, label, icon: Icon, count }) => (
             <button
               key={key}
               onClick={() => setActiveTab(key)}
               className={clsx(
-                'flex-shrink-0 flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px',
+                'flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-left w-full',
                 activeTab === key
-                  ? 'border-brand-600 text-brand-600'
-                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-200 hover:border-gray-300 dark:border-gray-600'
+                  ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400'
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-200'
               )}
             >
-              <Icon className="w-4 h-4" />
-              {label}
+              <Icon className="w-4 h-4 flex-shrink-0" />
+              <span className="flex-1">{label}</span>
               {count !== undefined && count > 0 && (
                 <span
                   className={clsx(
@@ -228,10 +229,11 @@ export function TripDetail() {
               )}
             </button>
           ))}
-        </div>
-      </div>
+        </nav>
 
-      {/* Tab content */}
+        {/* Right content panel */}
+        <div className="flex-1 min-w-0">
+
       {activeTab === 'photos' && (
         <div className="space-y-6">
           {/* Upload toggle */}
@@ -331,6 +333,9 @@ export function TripDetail() {
           endDate={trip.endDate}
         />
       )}
+
+        </div> {/* end right content panel */}
+      </div> {/* end flex row */}
 
       {slideshowOpen && photos.length > 0 && (
         <SlideshowModal
