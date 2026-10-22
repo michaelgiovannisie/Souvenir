@@ -40,7 +40,7 @@ public class Destination extends BaseEntity {
     private BigDecimal longitude;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "destination_type")
     @Builder.Default
     private DestinationType type = DestinationType.CITY;
 
