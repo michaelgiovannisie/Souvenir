@@ -51,7 +51,7 @@ public class Trip extends BaseEntity {
     private String coverPhotoPublicId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "trip_status")
+    @Column(nullable = false)
     @Builder.Default
     private TripStatus status = TripStatus.PLANNED;
 
