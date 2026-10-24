@@ -7,5 +7,5 @@ ALTER TABLE trips
 ALTER TABLE destinations
     ALTER COLUMN type TYPE VARCHAR(50) USING type::text;
 
-DROP TYPE IF EXISTS trip_status;
-DROP TYPE IF EXISTS destination_type;
+DROP TYPE IF EXISTS trip_status CASCADE;
+DROP TYPE IF EXISTS destination_type CASCADE;
