@@ -13,7 +13,7 @@ export class AiService {
   private readonly client: OpenAI;
   private readonly cache = new Map<string, CacheEntry>();
   private readonly CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
-  private readonly MODEL = 'llama-3.3-70b-versatile';
+  private readonly MODEL = 'openai/gpt-oss-20b';
 
   constructor() {
     this.client = new OpenAI({
@@ -77,11 +77,11 @@ Return only valid JSON, no markdown, no extra text.`;
         model: this.MODEL,
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
-        max_tokens: 1500,
+        max_tokens: 4096,
       });
 
       const content = response.choices[0]?.message?.content || '{}';
-      const result = JSON.parse(content);
+      const result = JSON.parse(this.extractJson(content));
       this.setCache(key, result);
       return result;
     } catch (error) {
@@ -123,11 +123,11 @@ Return only valid JSON, no markdown, no extra text.`;
         model: this.MODEL,
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.5,
-        max_tokens: 2000,
+        max_tokens: 4096,
       });
 
       const content = response.choices[0]?.message?.content || '{}';
-      const result = JSON.parse(content);
+      const result = JSON.parse(this.extractJson(content));
       this.setCache(key, result);
       return result;
     } catch (error) {
@@ -173,16 +173,24 @@ Return only valid JSON, no markdown, no extra text.`;
         model: this.MODEL,
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
-        max_tokens: 3000,
+        max_tokens: 4096,
       });
 
       const content = response.choices[0]?.message?.content || '{}';
-      const result = JSON.parse(content);
+      const result = JSON.parse(this.extractJson(content));
       this.setCache(key, result);
       return result;
     } catch (error) {
       this.logger.error('getItinerary error', error);
       throw error;
     }
+  }
+
+  private extractJson(text: string): string {
+    // Strip markdown code fences if present
+    const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (fenceMatch) return fenceMatch[1].trim();
+    // Otherwise return as-is
+    return text.trim();
   }
 }
