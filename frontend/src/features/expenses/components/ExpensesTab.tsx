@@ -270,11 +270,10 @@ export function ExpensesTab({ tripId }: { tripId: string }) {
                   </label>
                   <div className="relative">
                     <input
-                      type="number"
-                      min="0"
-                      step="0.01"
+                      type="text"
+                      inputMode="decimal"
                       value={budgetDraft[cat]}
-                      onChange={e => setBudgetDraft(prev => ({ ...prev, [cat]: e.target.value }))}
+                      onChange={e => setBudgetDraft(prev => ({ ...prev, [cat]: e.target.value.replace(/[^0-9.]/g, '') }))}
                       placeholder="No limit"
                       className="w-full pl-3 pr-12 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 focus:border-transparent"
                     />
@@ -315,8 +314,8 @@ export function ExpensesTab({ tripId }: { tripId: string }) {
             <div>
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Amount ({currency}) *</label>
               <input
-                type="number" step="0.01" min="0.01"
-                value={formAmount} onChange={e => setFormAmount(e.target.value)}
+                type="text" inputMode="decimal"
+                value={formAmount} onChange={e => setFormAmount(e.target.value.replace(/[^0-9.]/g, ''))}
                 placeholder="0.00" required
                 className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:ring-brand-400 focus:border-transparent dark:focus:border-transparent"
               />
